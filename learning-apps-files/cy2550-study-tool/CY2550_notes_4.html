@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CY 2550 — Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+// Early embed detection — runs before CSS/DOM render so topbar never flickers
+var __embedded = location.search.includes('embed=1') || location.hash.includes('embed') || window.self !== window.top;
+if(__embedded) document.documentElement.classList.add('embedded');
+</script>
+<style>
+:root {
+  --paper: #FDFBF7;
+  --paper-warm: #F8F5EE;
+  --paper-edge: #EDE8DD;
+  --ink: #1a1a1a;
+  --ink-light: #4a4a4a;
+  --ink-muted: #7a7a7a;
+  --ink-faint: #b0a898;
+  --rule: #ddd5c8;
+  --accent: #b44a2f;
+  --accent-light: #fdf0ec;
+  --blue: #2860a8;
+  --blue-light: #edf2fb;
+  --green: #2a7a4b;
+  --green-light: #eef7f1;
+  --purple: #6b4fa0;
+  --purple-light: #f4f0fa;
+  --amber: #946b2d;
+  --amber-light: #fdf6e8;
+  --red: #b83230;
+  --red-light: #fdf0f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+html.embedded .topbar {
+  height: 52px;
+  background: #FEFDFB;
+  border-bottom: 1px solid #DDD7CC;
+  box-shadow: 0 1px 3px rgba(44,36,24,.04);
+  padding-left: 640px;
+}
+html.embedded .topbar-brand { display: none !important; }
+html.embedded { scroll-padding-top: 62px; }
+html.embedded .sidebar { top: 52px; height: calc(100vh - 52px); }
+html.embedded .layout { padding-top: 0; }
+
+body {
+  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+  background: #EFEBE3;
+  color: var(--ink);
+  line-height: 1.72;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Top bar with search ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 56px;
+  gap: 16px;
+}
+
+.topbar-brand {
+  font-family: 'Newsreader', serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.search-wrap {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}
+
+.search-wrap input {
+  width: 100%;
+  padding: 8px 14px 8px 36px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--paper-warm);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search-wrap input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(40,96,168,0.1);
+  background: #fff;
+}
+
+.search-wrap input::placeholder { color: var(--ink-muted); }
+
+.search-wrap .search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-muted);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+.search-wrap .search-hint {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--ink-faint);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1px 6px;
+  pointer-events: none;
+}
+
+.search-results-count {
+  font-size: 12px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 80px;
+  text-align: right;
+}
+
+.topbar-nav {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.topbar-nav button {
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--ink-muted);
+  transition: all 0.15s;
+}
+
+.topbar-nav button:hover { background: var(--paper-warm); color: var(--ink); }
+
+/* ── Layout ── */
+.layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 0;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  padding: 20px 8px 40px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 4px; }
+
+.nav-group { margin-bottom: 16px; }
+
+.nav-group-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-faint);
+  font-weight: 700;
+  padding: 4px 10px;
+  margin-bottom: 2px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink-light);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.12s;
+  line-height: 1.4;
+}
+
+.nav-item:hover { background: var(--paper-warm); color: var(--ink); }
+.nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+
+.nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Main content ── */
+.content {
+  flex: 1;
+  min-width: 0;
+  background: var(--paper);
+  border-left: 1px solid var(--paper-edge);
+  border-right: 1px solid var(--paper-edge);
+  box-shadow: var(--shadow);
+  padding: 40px 52px 100px;
+}
+
+/* ── Hero ── */
+.hero {
+  padding-bottom: 32px;
+  margin-bottom: 40px;
+  border-bottom: 2px solid var(--rule);
+}
+
+.hero h1 {
+  font-family: 'Newsreader', serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+
+.hero .sub {
+  font-size: 17px;
+  color: var(--ink-muted);
+  margin-top: 8px;
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+}
+
+.hero .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--rule);
+  color: var(--ink-muted);
+  background: var(--paper-warm);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+
+.chip:hover, .chip.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+
+/* ── Sections ── */
+section[id] { scroll-margin-top: 72px; }
+
+.section-anchor {
+  display: block;
+  position: relative;
+  top: -72px;
+  visibility: hidden;
+  height: 0;
+}
+
+h2.sec {
+  font-family: 'Newsreader', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 48px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+h2.sec .sec-icon {
+  font-size: 20px;
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 28px 0 10px;
+  letter-spacing: -0.2px;
+}
+
+h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 16px 0 6px;
+}
+
+p { margin-bottom: 10px; }
+
+strong { font-weight: 600; }
+
+/* ── Searchable paragraphs ── */
+[data-searchable] { position: relative; }
+
+mark {
+  background: #ffe066;
+  color: inherit;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
+.no-match { display: none !important; }
+
+/* ── Tables ── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13.5px;
+}
+
+thead th {
+  background: var(--paper-warm);
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-muted);
+  border-bottom: 2px solid var(--rule);
+}
+
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--paper-edge);
+  vertical-align: top;
+}
+
+tbody tr:hover td { background: var(--paper-warm); }
+
+/* ── Cards ── */
+.card-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+
+.card {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+
+.card h4 { margin-top: 0; font-size: 14px; }
+.card p { font-size: 13px; color: var(--ink-light); margin-bottom: 0; }
+
+/* ── Callouts ── */
+.callout {
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 14px 0;
+  border-left: 3px solid;
+  font-size: 13.5px;
+}
+
+.callout-key { background: var(--blue-light); border-color: var(--blue); }
+.callout-warn { background: var(--amber-light); border-color: var(--amber); }
+.callout-attack { background: var(--red-light); border-color: var(--red); }
+.callout-def { background: var(--green-light); border-color: var(--green); }
+
+.callout b { display: block; margin-bottom: 3px; }
+
+/* ── Code ── */
+code {
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+/* ── Flow diagrams ── */
+.flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 14px 0;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 13.5px;
+}
+
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.flow-step:not(:last-child) { border-bottom: 1px dashed var(--rule); }
+
+.flow-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* ── Comparison boxes ── */
+.vs-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 14px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--paper-edge);
+}
+
+.vs-side { padding: 16px 18px; font-size: 13.5px; }
+.vs-side:first-child { background: var(--blue-light); border-right: 1px solid var(--paper-edge); }
+.vs-side:last-child { background: var(--purple-light); }
+.vs-side h4 { margin-top: 0; }
+
+/* ── Tags ── */
+.tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.tag-r { background: var(--red-light); color: var(--red); }
+.tag-b { background: var(--blue-light); color: var(--blue); }
+.tag-g { background: var(--green-light); color: var(--green); }
+.tag-a { background: var(--amber-light); color: var(--amber); }
+.tag-p { background: var(--purple-light); color: var(--purple); }
+
+/* ── Collapsible details ── */
+details {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  border-radius: 8px;
+  margin: 10px 0;
+}
+
+details summary {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-light);
+}
+
+details summary::-webkit-details-marker { display: none; }
+details summary::before { content: '▸'; color: var(--ink-faint); font-size: 12px; transition: transform 0.15s; }
+details[open] summary::before { transform: rotate(90deg); }
+details > div { padding: 0 16px 12px; font-size: 13.5px; }
+
+/* ── Quiz questions ── */
+.quiz {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.quiz:hover { border-color: var(--blue); }
+
+.quiz-q {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  display: flex;
+  gap: 8px;
+}
+
+.quiz-q::before {
+  content: 'Q';
+  background: var(--accent);
+  color: white;
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.quiz-a {
+  display: none;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--rule);
+  font-size: 13.5px;
+  color: var(--green);
+  line-height: 1.6;
+}
+
+.quiz.open .quiz-a { display: block; }
+.quiz.open { border-color: var(--green); background: var(--green-light); }
+
+/* ── Glossary index ── */
+.glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+  margin: 14px 0;
+}
+
+.glossary-item {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+}
+
+.glossary-term {
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.glossary-def { color: var(--ink-light); }
+
+/* ── Jump-to-top ── */
+.to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--ink-muted);
+  transition: all 0.15s;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 150;
+}
+
+.to-top.visible { opacity: 1; pointer-events: auto; }
+.to-top:hover { background: var(--accent-light); color: var(--accent); }
+
+/* ── Print styles ── */
+@media print {
+  .topbar, .sidebar, .to-top, .search-wrap { display: none !important; }
+  .content { border: none; box-shadow: none; padding: 20px; }
+  .layout { display: block; }
+  .quiz-a { display: block !important; }
+  body { background: white; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .content { padding: 24px 20px 80px; }
+  .hero h1 { font-size: 28px; }
+  .card-row { grid-template-columns: 1fr; }
+  .vs-box { grid-template-columns: 1fr; }
+  .glossary-grid { grid-template-columns: 1fr; }
+  .topbar { padding: 0 12px; }
+  .topbar-brand { font-size: 14px; }
+  .search-wrap .search-hint { display: none; }
+  html.embedded .topbar { padding-left: 500px; }
+}
+@media (max-width: 640px) {
+  html.embedded .topbar { padding-left: 12px; margin-top: 52px; }
+  html.embedded .sidebar { top: 104px; height: calc(100vh - 104px); }
+}
+</style>
+</head>
+<body>
+
+<!-- ── TOPBAR ── -->
+<header class="topbar">
+  <div class="topbar-brand">CY 2550</div>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="searchInput" placeholder="Search topics, terms, concepts…" autocomplete="off">
+    <span class="search-hint">⌘K</span>
+  </div>
+  <div class="search-results-count" id="searchCount"></div>
+  <div class="topbar-nav">
+    <button onclick="expandAll()">Expand all</button>
+    <button onclick="collapseAll()">Collapse</button>
+  </div>
+</header>
+
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar" id="sidebar">
+  <div class="nav-group">
+    <div class="nav-group-title">Authentication</div>
+    <a class="nav-item" href="#auth"><span class="nav-dot" style="background:var(--blue)"></span>Auth Basics</a>
+    <a class="nav-item" href="#pw-storage"><span class="nav-dot" style="background:var(--blue)"></span>Password Storage</a>
+    <a class="nav-item" href="#pw-cracking"><span class="nav-dot" style="background:var(--red)"></span>Password Cracking</a>
+    <a class="nav-item" href="#biometrics"><span class="nav-dot" style="background:var(--purple)"></span>Biometrics & 2FA</a>
+    <a class="nav-item" href="#dist-auth"><span class="nav-dot" style="background:var(--green)"></span>Distributed Auth</a>
+    <a class="nav-item" href="#kerberos"><span class="nav-dot" style="background:var(--accent)"></span>Kerberos</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title">Access Control</div>
+    <a class="nav-item" href="#access"><span class="nav-dot" style="background:var(--amber)"></span>DAC & Unix Perms</a>
+    <a class="nav-item" href="#mac"><span class="nav-dot" style="background:var(--red)"></span>MAC / BLP / Biba</a>
+    <a class="nav-item" href="#covert"><span class="nav-dot" style="background:var(--purple)"></span>Covert & Side Ch.</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title">Human Factors</div>
+    <a class="nav-item" href="#social-eng"><span class="nav-dot" style="background:var(--accent)"></span>Social Engineering</a>
+    <a class="nav-item" href="#phishing"><span class="nav-dot" style="background:var(--red)"></span>Phishing</a>
+    <a class="nav-item" href="#osint"><span class="nav-dot" style="background:var(--green)"></span>OSINT</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title">Frameworks</div>
+    <a class="nav-item" href="#threat"><span class="nav-dot" style="background:var(--amber)"></span>Threat Modeling</a>
+    <a class="nav-item" href="#vsd"><span class="nav-dot" style="background:var(--purple)"></span>Ethics & VSD</a>
+    <a class="nav-item" href="#linux"><span class="nav-dot" style="background:var(--green)"></span>Linux & GPG</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title">Reference</div>
+    <a class="nav-item" href="#glossary"><span class="nav-dot" style="background:var(--ink-faint)"></span>Glossary Index</a>
+    <a class="nav-item" href="#practice"><span class="nav-dot" style="background:var(--accent)"></span>Practice Questions</a>
+  </div>
+</nav>
+
+<!-- ── CONTENT ── -->
+<main class="content" id="content">
+
+<div class="hero">
+  <h1>Foundations of Cybersecurity</h1>
+  <p class="sub">Complete study guide — CY 2550, Spring 2025 Created by Raul Pineda</p>
+  <div class="chips" id="filterChips">
+    <span class="chip active" data-filter="all">All Topics</span>
+    <span class="chip" data-filter="auth">Authentication</span>
+    <span class="chip" data-filter="access">Access Control</span>
+    <span class="chip" data-filter="human">Human Factors</span>
+    <span class="chip" data-filter="framework">Frameworks</span>
+  </div>
+</div>
+
+<!-- ══════════ AUTHENTICATION ══════════ -->
+<section id="auth" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--blue-light)">🔐</span>Authentication</h2>
+<p data-searchable>Authentication is the process of <strong>verifying an actor's identity</strong>. All permissions, capabilities, and access control depend on it. Parameterized as a username and a secret.</p>
+
+<h3>Three Classes of Secrets</h3>
+<div class="card-row" data-searchable>
+  <div class="card"><h4 style="color:var(--blue)">Something You Know</h4><p>Passwords, PINs, security questions</p></div>
+  <div class="card"><h4 style="color:var(--purple)">Something You Have</h4><p>Smart card, smartphone, hardware token</p></div>
+  <div class="card"><h4 style="color:var(--green)">Something You Are</h4><p>Fingerprint, face, voice, iris scan</p></div>
+</div>
+<p data-searchable>Desirable properties of secrets: <strong>unforgeable</strong>, <strong>unguessable</strong>, and <strong>revocable</strong>.</p>
+</section>
+
+<!-- ══════════ PASSWORD STORAGE ══════════ -->
+<section id="pw-storage" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--green-light)">🗄️</span>Password Storage</h2>
+
+<div class="callout callout-attack" data-searchable><b>⚠ Never store passwords in plain text.</b>If an attacker steals the file (Linux: /etc/shadow, Windows: SAM), they can log in as any user including root.</div>
+
+<h3>Hashing</h3>
+<p data-searchable>Store <code>hash(password)</code>. Cryptographic hashes are deterministic, high-entropy, and collision-resistant. Examples: MD5, SHA1, SHA256, SHA512, bcrypt, scrypt, PBKDF2.</p>
+
+<h3>Salting</h3>
+<p data-searchable>Add a unique random <strong>salt</strong> per user: <code>hash(salt + password)</code>. Salts stored in plain text. Defeats pre-computed tables — attacker must brute-force each password individually.</p>
+
+<h3>Key Stretching & Work Factor</h3>
+<p data-searchable>Standard hashes are too fast — GPUs can crack them. Use intentionally slow hash functions:</p>
+<table data-searchable>
+  <thead><tr><th>Algorithm</th><th>Key Feature</th></tr></thead>
+  <tbody>
+  <tr><td><code>bcrypt</code></td><td>Configurable work factor (rounds). Widely used standard.</td></tr>
+  <tr><td><code>PBKDF2</code></td><td>Key derivation function with configurable iterations.</td></tr>
+  <tr><td><code>scrypt</code></td><td>Requires large <strong>memory</strong> + CPU → GPU attacks much harder.</td></tr>
+  </tbody>
+</table>
+
+<h3>Honeywords</h3>
+<p data-searchable>Store multiple salted/hashed passwords per user. Only one is real — the rest are <strong>honeywords</strong>. A separate <strong>honeyserver</strong> (physically separate) stores the index of the real one. If an attacker cracks and uses a honeyword → alert raised.</p>
+
+<h3>Password Recovery & Reset</h3>
+<p data-searchable><strong>KBA</strong> (knowledge-based) — easily defeated via OSINT. <strong>Account-based</strong> (email/SMS code) — depends on secondary account security. Best practice: layered mechanism. SIM hijacking and email takeover are real risks.</p>
+</section>
+
+<!-- ══════════ PASSWORD CRACKING ══════════ -->
+<section id="pw-cracking" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--red-light)">💥</span>Password Cracking</h2>
+
+<table data-searchable>
+  <thead><tr><th>Method</th><th>Description</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Brute Force</strong></td><td>Try all possible passwords. A GPU can hash all 6-char passwords in 16 minutes.</td></tr>
+  <tr><td><strong>Dictionary Attack</strong></td><td>Use common/breached password lists. 60-70% cracked in &lt;24hrs.</td></tr>
+  <tr><td><strong>Rule Mangling</strong></td><td>Apply transforms: password → p4ssw0rd → Password1. Tools: John the Ripper, hashcat.</td></tr>
+  <tr><td><strong>Hash Chains</strong></td><td>Pre-compute chains password→hash→reduce→hash. Store only start/end. Prone to collisions.</td></tr>
+  <tr><td><strong>Rainbow Tables</strong></td><td>Improved hash chains using family of reduction functions {R₁…Rₖ} to reduce collisions.</td></tr>
+  </tbody>
+</table>
+
+<div class="vs-box" data-searchable>
+  <div class="vs-side"><h4 style="color:var(--blue)">Hash Chains</h4><p>Single reduction function R. Collisions merge chains → wasted space, false positives. Larger k = fewer chains but more rebuild cost.</p></div>
+  <div class="vs-side"><h4 style="color:var(--purple)">Rainbow Tables</h4><p>Family of reductions {R₁, R₂, …}. Collisions only possible at same position. Defeated by <strong>salting</strong> and key stretching.</p></div>
+</div>
+
+<h3>Password Strength</h3>
+<p data-searchable>Entropy: <strong>S = log₂(Nᴸ)</strong>. N = symbol space, L = length. Length matters more than variety. Use 16+ char passphrases. Use a mnemonic: "I double dare you, say what one more time" → <code>i2Dy,s"w"omt</code>. Use a password manager. Don't reuse passwords.</p>
+</section>
+
+<!-- ══════════ BIOMETRICS & 2FA ══════════ -->
+<section id="biometrics" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--purple-light)">👆</span>Biometrics & Two-Factor Auth</h2>
+
+<table data-searchable>
+  <thead><tr><th>Biometric</th><th>Vulnerabilities</th></tr></thead>
+  <tbody>
+  <tr><td>Fingerprints</td><td>Lifted from surfaces with tape/glue + gelatin replica. Compellable by law enforcement.</td></tr>
+  <tr><td>Face (2D)</td><td>Broken trivially with a photo.</td></tr>
+  <tr><td>Face (3D depth)</td><td>More secure but vulnerable to lifelike masks.</td></tr>
+  <tr><td>Voice</td><td>Static phrase → replay attack. Trained model → synthetic voice AI with enough samples.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-attack" data-searchable><b>⚠ Biometrics are immutable.</b>You ARE the password — you can't change it. No reset possible once compromised. Example: OPM breach (2015) — China stole fingerprints of all US security clearance holders.</div>
+
+<h3>Token-Based 2FA</h3>
+<table data-searchable>
+  <thead><tr><th>Method</th><th>How</th><th>Issues</th></tr></thead>
+  <tbody>
+  <tr><td><span class="tag tag-r">SMS Codes</span></td><td>Code via text message</td><td><strong>Deprecated!</strong> SIM hijacking — attacker calls carrier, gets new SIM.</td></tr>
+  <tr><td><span class="tag tag-b">TOTP</span></td><td>Shared secret → HMAC-based codes that change every 30s</td><td>Requires initial secret sharing (QR code).</td></tr>
+  <tr><td><span class="tag tag-g">Hardware (U2F)</span></td><td>Crypto keys in tamper-resistant device</td><td>Always buy 2 keys — keep backup in a safe!</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════ DISTRIBUTED AUTH ══════════ -->
+<section id="dist-auth" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--green-light)">🌐</span>Distributed Authentication</h2>
+
+<p data-searchable>In distributed environments, syncing password files doesn't scale. Need centralized auth. But sending passwords in the clear → attacker can observe. Services learning passwords → additional compromise point.</p>
+
+<h3>NIS (Yellow Pages)</h3>
+<p data-searchable>Sun's Network Information Service. Central directory for users, hostnames, etc. <strong>Fatal flaw:</strong> <code>ypcat passwd</code> exposed password hashes to anyone. Used weak crypt-based hashing. Easily cracked.</p>
+
+<h3>Needham-Schroeder Protocol</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span>Alice → Auth Server: "I want to talk to Bob"</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span>AS → Alice: {K_AB, {K_AB, Alice}encrypted_with_Bob's_key} encrypted_with_Alice's_key</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span>Alice → Bob: {K_AB, Alice} encrypted with Bob's key</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span>Bob → Alice: {N_B} encrypted with K_AB (challenge nonce)</span></div>
+  <div class="flow-step"><span class="flow-num">5</span><span>Alice → Bob: {N_B − 1} encrypted with K_AB (proves she has K_AB)</span></div>
+</div>
+
+<div class="callout callout-attack" data-searchable><b>⚠ Replay Attack.</b>Attacker who stole old session key K_AB can replay step 3 even after Alice changes K_AS. <strong>Fix:</strong> Add timestamps — Bob only accepts fresh timestamps.</div>
+</section>
+
+<!-- ══════════ KERBEROS ══════════ -->
+<section id="kerberos" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--accent-light)">🎟️</span>Kerberos</h2>
+
+<p data-searchable>Created by MIT (Project Athena). Based on Needham-Schroeder. "Needham-Schroeder on steroids." Uses <strong>tickets</strong> (not tokens) as assertions of authenticity and authorization. Basis of <strong>Active Directory</strong> authentication.</p>
+
+<h3>Components</h3>
+<table data-searchable>
+  <thead><tr><th>Component</th><th>Abbrev</th><th>Role</th></tr></thead>
+  <tbody>
+  <tr><td>Client</td><td>—</td><td>The user</td></tr>
+  <tr><td>Authentication Server</td><td>AS</td><td>Verifies identity, issues TGTs. Part of KDC.</td></tr>
+  <tr><td>Ticket Granting Server</td><td>TGS</td><td>Issues service tickets for specific resources. Part of KDC.</td></tr>
+  <tr><td>Key Distribution Center</td><td>KDC</td><td>Contains both AS and TGS. Central authority.</td></tr>
+  <tr><td>Ticket Granting Ticket</td><td>TGT</td><td>Proof of identity. Required to talk to TGS.</td></tr>
+  </tbody>
+</table>
+
+<h3>Authentication Flow</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span><strong>User → AS:</strong> "I need access"</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span><strong>AS → User:</strong> Session key (encrypted with user's key) + TGT (entry pass to TGS)</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span><strong>User → TGS:</strong> TGT + target service + {user identity, timestamp} encrypted with session key</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span><strong>TGS → User:</strong> Session key for target service (encrypted two ways — once for user, once for service)</span></div>
+</div>
+
+<div class="callout callout-key" data-searchable><b>🎟️ Key Point</b>Without a valid TGT, the TGS refuses to communicate. The TGT is the trust bridge between you and any service on the network.</div>
+
+<h3>Human vs. Non-Human Identity (NHI)</h3>
+<p data-searchable>Service accounts (NHIs) are not human but have credentials and often <strong>administrative privileges</strong> needed to run services. Attackers target services over users because services have more power.</p>
+
+<h3>Kerberos Attacks</h3>
+<table data-searchable>
+  <thead><tr><th>Attack</th><th>Description</th></tr></thead>
+  <tbody>
+  <tr><td><span class="tag tag-r">Golden Ticket</span></td><td>Forged TGT → root/admin access to entire domain. Compromise KRBTGT account.</td></tr>
+  <tr><td><span class="tag tag-r">NTLM Pass-the-Hash</span></td><td>NTLMv1 hashes captured and replayed directly. Microsoft phasing out NTLMv1.</td></tr>
+  <tr><td><span class="tag tag-r">KDC Compromise</span></td><td>Single point of failure. Compromise → network-wide access. DoS → network stops.</td></tr>
+  <tr><td><span class="tag tag-a">Clock Skew</span></td><td>Timestamps critical. Bad clocks → protocol failure. Fix: use NTP.</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════ ACCESS CONTROL ══════════ -->
+<section id="access" data-section data-category="access">
+<h2 class="sec"><span class="sec-icon" style="background:var(--amber-light)">🔒</span>Access Control</h2>
+
+<p data-searchable>Policy specifying how entities interact with resources. <strong>Principal</strong> = user. <strong>Subject</strong> = entity acting on behalf of principal (a program). <strong>Object</strong> = resource (file, socket, device).</p>
+
+<p data-searchable><strong>DAC</strong> (Discretionary Access Control): owner controls access, can propagate rights. <strong>MAC</strong> (Mandatory Access Control): system-wide policy, denies users full control.</p>
+
+<h3>ACLs</h3>
+<p data-searchable>Access Control Lists encode columns of the access control matrix. Each object has a list of (subject, operation) pairs. Very flexible but complicated to manage — infinite permutations.</p>
+
+<h3>Unix Permissions</h3>
+<p data-searchable>Based on <strong>owners</strong> and <strong>groups</strong>. Three sets: owner (u), group (g), other (o). Three permissions: read (r=4), write (w=2), execute (x=1). <code>chmod 755 file</code> = rwxr-xr-x. Only owners can chmod. Only root can chown to different user.</p>
+
+<div class="callout callout-warn" data-searchable><b>⚠ Unix limitations.</b>Max 3 permission levels. Not all access control matrices can be represented. If 4+ distinct privilege levels needed for one file → impossible.</div>
+
+<h3>setuid & Confused Deputy</h3>
+<p data-searchable><code>setuid</code> (chmod u+s): program runs as <strong>file owner</strong> not executing user. Example: <code>passwd</code> runs as root to write /etc/shadow. Creates <strong>ambient authority</strong>.</p>
+<p data-searchable><strong>Confused Deputy Problem:</strong> A setuid program serves two principals and can't distinguish which one it's acting for. Malicious user tricks it into using root's permissions on unauthorized resources. <strong>Never set scripts as setuid</strong> — TOCTOU vulnerabilities.</p>
+
+<h3>Capabilities vs. ACLs</h3>
+<div class="vs-box" data-searchable>
+  <div class="vs-side"><h4 style="color:var(--blue)">ACLs (Columns)</h4><p>Object lists who can access it. Ambient authority. Simple for users. Vulnerable to confused deputies.</p></div>
+  <div class="vs-side"><h4 style="color:var(--purple)">Capabilities (Rows)</h4><p>Subject holds unforgeable tokens of authority. Must explicitly pass capabilities. No ambient authority. Solves confused deputy.</p></div>
+</div>
+<p data-searchable>Real-world capabilities: Android/iOS app permissions, POSIX capabilities (CAP_CHOWN, CAP_KILL, CAP_SYS_TIME), SELinux.</p>
+</section>
+
+<!-- ══════════ MAC ══════════ -->
+<section id="mac" data-section data-category="access">
+<h2 class="sec"><span class="sec-icon" style="background:var(--red-light)">🏛️</span>MAC: Bell-LaPadula & Biba</h2>
+
+<p data-searchable>DAC fails because it assumes benign software, bug-free code, and well-behaved users. MAC restricts access based on system-wide policy for <strong>Multi-Level Security (MLS)</strong>. Levels: Top Secret > Secret > Confidential > Unclassified.</p>
+
+<h3>Bell-LaPadula (1973) — Confidentiality</h3>
+<div class="card" data-searchable>
+  <p><strong>Simple Security:</strong> <span class="tag tag-b">No Read Up</span> — can read only if level(subject) ≥ level(object)</p>
+  <p><strong>★-Property:</strong> <span class="tag tag-b">No Write Down</span> — can write only if level(subject) ≤ level(object)</p>
+  <p><strong>Discretionary Security:</strong> Access must also be allowed by the access control matrix.</p>
+  <p><strong>Tranquility:</strong> Security levels never decrease during state transitions.</p>
+  <p style="margin:0"><strong>Caveats:</strong> Only prevents <em>overt</em> leakage. Does NOT address covert channels. Only confidentiality — no integrity.</p>
+</div>
+
+<h3>Biba (1975) — Integrity</h3>
+<div class="card" data-searchable>
+  <p><strong>Strict Integrity:</strong> <span class="tag tag-p">No Read Down</span> — can read only if integrity(subject) ≤ integrity(object)</p>
+  <p><strong>Strict Integrity:</strong> <span class="tag tag-p">No Write Up</span> — can write only if integrity(subject) ≥ integrity(object)</p>
+  <p style="margin:0">Other policies: subject low-water mark (tainting on read), object low-water mark (tainting on write), Ring (read anything, no write up).</p>
+</div>
+
+<div class="vs-box" data-searchable>
+  <div class="vs-side"><h4 style="color:var(--blue)">Bell-LaPadula</h4><p><strong>Confidentiality.</strong> "Read down, write up." Controls reads. Even malicious programs can't leak what they can't read.</p></div>
+  <div class="vs-side"><h4 style="color:var(--purple)">Biba</h4><p><strong>Integrity.</strong> "Read up, write down." Controls writes. Subjects must be trusted — malicious programs CAN write bad data.</p></div>
+</div>
+
+<p data-searchable>Windows uses <strong>Mandatory Integrity Control</strong> since Vista: Low, Medium, High, System levels. Ring policy. IE protected mode runs as Low.</p>
+</section>
+
+<!-- ══════════ COVERT & SIDE CHANNELS ══════════ -->
+<section id="covert" data-section data-category="access">
+<h2 class="sec"><span class="sec-icon" style="background:var(--purple-light)">👁️</span>Covert & Side Channels</h2>
+
+<h3>Covert Channels</h3>
+<p data-searchable>Communication via <strong>unintentional channels</strong> that bypass access control. Examples: file existence/locks, event timing, CPU cache (Meltdown & Spectre). Not blocked by Bell-LaPadula's ★-property. Very hard to eliminate — may be in code, OS, or hardware.</p>
+<p data-searchable><strong>Example:</strong> Unclassified process tries to create "russia_intel.docx". Error (exists) → classified file name leaked. Extend to binary encoding: create/don't create files to transmit 0s and 1s.</p>
+
+<div class="callout callout-def" data-searchable><b>🛡 Mitigations (imperfect):</b> Rate limits on operations (may hurt performance). Add randomness/chaff (slows but doesn't stop). Anomaly detection (false positives, not guaranteed). Use Forward Error Correction for robustness.</div>
+
+<h3>Side Channels</h3>
+<p data-searchable>Inadvertent info leakage through physical phenomena. <strong>Timing:</strong> password recovery via keystroke timing in SSH. <strong>Power:</strong> crypto key recovery from CPU voltage. <strong>RF emissions:</strong> video signal recovery from cable EM leakage. <strong>CPU cache:</strong> Meltdown & Spectre.</p>
+</section>
+
+<!-- ══════════ SOCIAL ENGINEERING ══════════ -->
+<section id="social-eng" data-section data-category="human">
+<h2 class="sec"><span class="sec-icon" style="background:var(--accent-light)">🎭</span>Social Engineering</h2>
+
+<p data-searchable>Psychological manipulation into performing actions or divulging information. Exploits human trust, not technical flaws. Techniques are ancient (con-men, magicians, PSYOPs) but amplified by the internet.</p>
+
+<h3>Cognitive Biases</h3>
+<div class="card-row" data-searchable>
+  <div class="card"><h4 style="color:var(--blue)">Authority Bias</h4><p>Believe/obey authority figures regardless of content</p></div>
+  <div class="card"><h4 style="color:var(--purple)">Confirmation Bias</h4><p>Seek info confirming existing beliefs</p></div>
+  <div class="card"><h4 style="color:var(--green)">Courtesy Bias</h4><p>Urge to avoid offending people</p></div>
+  <div class="card"><h4 style="color:var(--accent)">Halo Effect</h4><p>Positive traits spill across domains</p></div>
+  <div class="card"><h4 style="color:var(--amber)">Ingroup Bias</h4><p>Preferential treatment for own group</p></div>
+  <div class="card"><h4 style="color:var(--red)">Framing Effect</h4><p>Different conclusions from same info based on presentation</p></div>
+</div>
+
+<h3>4-Step Attack Process</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span><strong>Information Asymmetry:</strong> Know more about the target than they know about you. More info = more convincing.</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span><strong>Context Construction (Pretexting):</strong> Design believable character + backstory. Opens bias attacks. Creates urgency → cognitive overload.</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span><strong>Elicitation:</strong> Draw people out, build trust. Be polite, praise expertise, show concern.</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span><strong>Persuasion + Follow-through:</strong> Get victim to act. Ego appeals, false statements, quid pro quo. End conversation naturally — don't ghost.</span></div>
+</div>
+
+<h3>Emotional Hijacking</h3>
+<p data-searchable>Humans operate either logically or emotionally, not both. Emotional response is faster (instinct). A sudden emotional trigger (surprise, fear, joy) overrides logical thinking. Attackers exploit this — gift card scams create joy, urgency creates panic.</p>
+
+<h3>Attack Types</h3>
+<p data-searchable><strong>Baiting:</strong> Malware-loaded USB drops. <strong>Tailgating:</strong> Follow employees through secured doors (courtesy + ingroup bias). <strong>Scareware:</strong> Fake antivirus. <strong>419/Advance-fee:</strong> Promise reward for upfront payment. <strong>Sextortion:</strong> Uses breached password as "proof."</p>
+
+<details data-searchable>
+  <summary>Why 419 Scammers Say They're From Nigeria (Herley 2012)</summary>
+  <div>
+    <p>Victim density is extremely low (&lt;&lt;1%). Biggest cost = false positives (corresponding with non-victims). An absurd pretext (Nigerian Prince) is <strong>intentional</strong> — it filters out everyone except the most gullible. Victims self-identify by responding, dramatically reducing false positive rate. Expected return: E = (d·G − (1−d)·C)·N. Profitable only if true positives vastly outnumber false positives.</p>
+    <p><strong>Contrast with sextortion:</strong> Monetization is fully automated (Bitcoin). C=0, so attack everyone with the strongest possible pretext. No need to filter.</p>
+  </div>
+</details>
+</section>
+
+<!-- ══════════ PHISHING ══════════ -->
+<section id="phishing" data-section data-category="human">
+<h2 class="sec"><span class="sec-icon" style="background:var(--red-light)">🎣</span>Phishing</h2>
+
+<p data-searchable>Social-engineering attack impersonating a trusted source via email, text, call, websites, social media. Most common cause of data breaches. 611,000+ active phishing sites. Average cost: $4.88M per breach.</p>
+
+<h3>Types</h3>
+<table data-searchable>
+  <thead><tr><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+  <tr><td><span class="tag tag-r">Spear Phishing</span></td><td>Targeted at specific individuals/companies. Highly personalized.</td></tr>
+  <tr><td><span class="tag tag-r">Whaling</span></td><td>Targets senior executives or privileged users.</td></tr>
+  <tr><td><span class="tag tag-r">BEC / CEO Fraud</span></td><td>Impersonate CEO to wire money. Exploits authority + urgency bias.</td></tr>
+  <tr><td><span class="tag tag-a">Clone Phishing</span></td><td>Clone legitimate email, swap links/attachments with malicious ones.</td></tr>
+  <tr><td><span class="tag tag-a">Vishing / Smishing</span></td><td>Phone call (voice) or SMS (text) phishing.</td></tr>
+  <tr><td><span class="tag tag-a">Quishing</span></td><td>Malicious QR codes redirect to fake sites.</td></tr>
+  <tr><td><span class="tag tag-p">Social Media</span></td><td>Via platform DMs and messaging.</td></tr>
+  </tbody>
+</table>
+
+<h3>Techniques</h3>
+<p data-searchable>Impersonation, fake websites, spoofing (slight misspellings like "vv" for "w"), urgency/fear, AI-generated personalized messages + deepfakes, hybrid multi-channel attacks.</p>
+
+<h3>How to Spot & Defend</h3>
+<p data-searchable><strong>Spot:</strong> Verify sender address, hover over links, check for grammar/spelling errors, question urgency, verify requests through trusted channels, be suspicious of unsolicited attachments. <strong>Defend:</strong> Think before clicking, spam filters, regular updates, MFA, least privilege, report suspicious messages.</p>
+
+<h3>Research Findings</h3>
+<details data-searchable>
+  <summary>Key Studies on Phishing Susceptibility</summary>
+  <div>
+    <p><strong>Downs et al. (2006):</strong> 20 participants. People use poor strategies like "Do I have an account with this business?" 74% suspicious of Citibank phish, only 47% of Amazon phish. 55% noticed strange URLs. Security warnings largely ignored.</p>
+    <p><strong>Dhamija et al. (2006):</strong> 22 participants judging 20 websites. Correct identification: 6-18 of 19. Best strategy: domain + HTTPS + padlock + certificate. No correlation with age, sex, education, or browser choice.</p>
+    <p><strong>Jagatic et al. (2005) "Social Phishing":</strong> 581 Indiana U. students. Generic email: <strong>16%</strong> success. Spoofed from a friend: <strong>72%</strong> success. Opposite-sex "friend" even more effective. Some victims logged in multiple times.</p>
+    <p><strong>Sheng et al. (2010):</strong> 1000 participants. Before training: ~47% fell for phishing. After training: ~28% (40% improvement). But legitimate link clicks also dropped slightly.</p>
+  </div>
+</details>
+</section>
+
+<!-- ══════════ OSINT ══════════ -->
+<section id="osint" data-section data-category="human">
+<h2 class="sec"><span class="sec-icon" style="background:var(--green-light)">🔍</span>OSINT</h2>
+<p data-searchable><strong>Open-Source Intelligence:</strong> Collecting publicly available information to produce useful insights. "Once it's on the internet, it's there forever." Used by attackers to craft targeted phishing and social engineering.</p>
+
+<h3>Techniques</h3>
+<p data-searchable><strong>Google Dorking:</strong> <code>filetype:pdf</code>, <code>site:example.com</code>, <code>intitle:</code>, <code>intext:</code>, <code>inurl:</code>, <code>-term</code> to exclude, quotes for exact match. <strong>Reverse Image Search:</strong> TinEye, Google Images. <strong>Wayback Machine:</strong> archive.org for past website snapshots. <strong>OSINT Framework:</strong> osintframework.com directory. <strong>Social media, public records, Spokeo, background checks.</strong></p>
+
+<p data-searchable><strong>Ethics:</strong> Stick to public info. Get permission for private individuals. Don't exploit. Verify everything.</p>
+</section>
+
+<!-- ══════════ THREAT MODELING ══════════ -->
+<section id="threat" data-section data-category="framework">
+<h2 class="sec"><span class="sec-icon" style="background:var(--amber-light)">🎯</span>Threat Modeling</h2>
+
+<p data-searchable><strong>Vulnerability</strong> = identified weakness. <strong>Threat</strong> = tactic exploiting a vulnerability. <strong>Risk</strong> = likelihood of loss/damage.</p>
+
+<h3>Process</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span>Identify things of value (data, credentials, physical access, sensors)</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span>Enumerate attack surfaces (physical, social, network, supply chain)</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span>Hypothesize attackers — map capabilities to targets and surfaces</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span>Survey mitigations</span></div>
+  <div class="flow-step"><span class="flow-num">5</span><span>Balance costs vs. risks (subjective, context-dependent)</span></div>
+</div>
+
+<h3>STRIDE</h3>
+<table data-searchable>
+  <thead><tr><th>Letter</th><th>Threat</th><th>Example Question</th></tr></thead>
+  <tbody>
+  <tr><td><strong>S</strong></td><td>Spoofing</td><td>Can I pretend to be someone else?</td></tr>
+  <tr><td><strong>T</strong></td><td>Tampering</td><td>Can I maliciously change data?</td></tr>
+  <tr><td><strong>R</strong></td><td>Repudiation</td><td>Can I deny I did something?</td></tr>
+  <tr><td><strong>I</strong></td><td>Info Disclosure</td><td>Can I obtain and leak private data?</td></tr>
+  <tr><td><strong>D</strong></td><td>Denial of Service</td><td>Can I disrupt availability?</td></tr>
+  <tr><td><strong>E</strong></td><td>Elevation of Privilege</td><td>Can I gain admin access?</td></tr>
+  </tbody>
+</table>
+
+<h3>DREAD (Risk Scoring)</h3>
+<p data-searchable><strong>D</strong>amage potential · <strong>R</strong>eproducibility · <strong>E</strong>xploitability · <strong>A</strong>ffected users · <strong>D</strong>iscoverability. Each factor scored to prioritize which threats to address first.</p>
+</section>
+
+<!-- ══════════ VSD ══════════ -->
+<section id="vsd" data-section data-category="framework">
+<h2 class="sec"><span class="sec-icon" style="background:var(--purple-light)">⚖️</span>Ethics & Value Sensitive Design</h2>
+
+<p data-searchable>VSD makes socially-informed, value-based choices in technology design. It is an <strong>outlook and process</strong>, NOT an algorithm, moral framework, or recipe.</p>
+
+<h3>VSD Process</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span>Identify <strong>stakeholders</strong> (including typically overlooked ones)</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span>Identify <strong>values/interests</strong> at stake for each stakeholder</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span>Find <strong>tradeoffs</strong> between competing values</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span><strong>Prioritize</strong> important values</span></div>
+  <div class="flow-step"><span class="flow-num">5</span><span><strong>Repeat</strong> as new information emerges</span></div>
+</div>
+
+<h3>Three Investigations</h3>
+<p data-searchable><strong>Values:</strong> Applied ethics, law, policy, case studies. <strong>Empirical:</strong> Surveys, interviews, observation, A/B testing. <strong>Technical:</strong> Prototyping, auditing, red team exercises, privacy impact assessments.</p>
+
+<p data-searchable><strong>Technical vs. Technological Success:</strong> Does it function? (technical) vs. Is it beneficial and fair? (technological).</p>
+
+<p data-searchable><strong>Responsible Disclosure:</strong> Verify the vulnerability, notify the affected party, give time to fix, then disclose. PunkSpider case study. <strong>Disinformation as cybersecurity:</strong> Campaigns target cognitive systems like cyberattacks target digital ones. "Big tent" view (Mary Ellen Zurko, MIT). Information deficit model is discredited — people don't believe false things simply because they lack facts.</p>
+</section>
+
+<!-- ══════════ LINUX & GPG ══════════ -->
+<section id="linux" data-section data-category="framework">
+<h2 class="sec"><span class="sec-icon" style="background:var(--green-light)">🐧</span>Linux & GPG</h2>
+
+<h3>Essential Commands</h3>
+<table data-searchable>
+  <thead><tr><th>Command</th><th>Function</th></tr></thead>
+  <tbody>
+  <tr><td><code>pwd</code></td><td>Print working directory</td></tr>
+  <tr><td><code>ls -la</code></td><td>List all files with permissions (incl. hidden)</td></tr>
+  <tr><td><code>cd ~ / cd ..</code></td><td>Go home / up one directory. <code>.</code> = current</td></tr>
+  <tr><td><code>mkdir / touch / cp -r / mv / rm -r</code></td><td>Create dir/file, recursive copy, move/rename, recursive delete</td></tr>
+  <tr><td><code>chmod ugo+rwx / chmod 777</code></td><td>Change permissions (symbolic / octal)</td></tr>
+  <tr><td><code>chown user:group file</code></td><td>Change ownership (only root can change owners)</td></tr>
+  <tr><td><code>ssh user@host</code></td><td>Secure remote login</td></tr>
+  <tr><td><code>scp file user@host:path</code></td><td>Secure copy to remote machine</td></tr>
+  <tr><td><code>cat / grep / sort / uniq / head / tail</code></td><td>Text processing pipeline tools</td></tr>
+  <tr><td><code>|</code> (pipe)</td><td>Chain output → input: <code>ps aux | grep bash</code></td></tr>
+  <tr><td><code>&gt; / &gt;&gt; / 2&gt;</code></td><td>Redirect output / append / stderr</td></tr>
+  <tr><td><code>man command</code></td><td>Manual/help pages</td></tr>
+  <tr><td><code>nano / vim</code></td><td>Text editors (Ctrl+O save, Ctrl+X quit in nano)</td></tr>
+  <tr><td><code>md5sum file.txt</code></td><td>Compute MD5 hash of file</td></tr>
+  </tbody>
+</table>
+
+<h3>Linux Auth Files</h3>
+<p data-searchable><code>/etc/passwd</code>: World-readable. Contains username, UID, GID, home dir, shell. <code>/etc/shadow</code>: Root-only. Contains password hashes. Format: <code>$algo$salt$hash</code> — algo 1=MD5, 5=SHA256, 6=SHA512. PAM (Pluggable Authentication Modules) handles policy.</p>
+
+<h3>GPG (GNU Privacy Guard)</h3>
+<p data-searchable>Implements OpenPGP standard. Asymmetric encryption: public key encrypts, private key decrypts. Signing works in reverse: sign with private, verify with public. Web of Trust: trust is transitive via key signing (not CAs like HTTPS). Use RSA 4096-bit keys.</p>
+<table data-searchable>
+  <thead><tr><th>Command</th><th>Function</th></tr></thead>
+  <tbody>
+  <tr><td><code>gpg --full-generate-key</code></td><td>Generate keypair (RSA 4096)</td></tr>
+  <tr><td><code>gpg --list-keys / --list-secret-keys</code></td><td>View keyring</td></tr>
+  <tr><td><code>gpg --armor --export uid &gt; pub.asc</code></td><td>Export public key (ASCII)</td></tr>
+  <tr><td><code>gpg --armor --export-secret-keys uid</code></td><td>Export private key (handle with care!)</td></tr>
+  <tr><td><code>gpg --import file</code></td><td>Import someone's public key</td></tr>
+  <tr><td><code>gpg --armor --recipient uid --encrypt file</code></td><td>Encrypt for recipient</td></tr>
+  <tr><td><code>gpg --armor --sign file</code></td><td>Digitally sign a file</td></tr>
+  <tr><td><code>gpg --sign-key uid</code></td><td>Sign someone's key (web of trust)</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════ GLOSSARY ══════════ -->
+<section id="glossary" data-section data-category="all">
+<h2 class="sec"><span class="sec-icon" style="background:var(--paper-warm)">📖</span>Glossary Index</h2>
+<p>Quick-reference for every key term. Searchable.</p>
+
+<div class="glossary-grid" data-searchable>
+  <div class="glossary-item"><span class="glossary-term">ACL</span><span class="glossary-def">Access Control List — per-object list of (subject, permission) pairs</span></div>
+  <div class="glossary-item"><span class="glossary-term">AS</span><span class="glossary-def">Authentication Server — verifies identity, issues TGTs (part of KDC)</span></div>
+  <div class="glossary-item"><span class="glossary-term">bcrypt</span><span class="glossary-def">Slow hash with configurable work factor for password storage</span></div>
+  <div class="glossary-item"><span class="glossary-term">BEC</span><span class="glossary-def">Business Email Compromise — spear phishing targeting money/info</span></div>
+  <div class="glossary-item"><span class="glossary-term">Bell-LaPadula</span><span class="glossary-def">MAC model for confidentiality: no read up, no write down</span></div>
+  <div class="glossary-item"><span class="glossary-term">Biba</span><span class="glossary-def">MAC model for integrity: no read down, no write up</span></div>
+  <div class="glossary-item"><span class="glossary-term">Capability</span><span class="glossary-def">Unforgeable token granting specific access to an object</span></div>
+  <div class="glossary-item"><span class="glossary-term">Confused Deputy</span><span class="glossary-def">Program serving two principals, can't distinguish which one</span></div>
+  <div class="glossary-item"><span class="glossary-term">Covert Channel</span><span class="glossary-def">Unintentional communication bypassing access controls</span></div>
+  <div class="glossary-item"><span class="glossary-term">DAC</span><span class="glossary-def">Discretionary Access Control — owner-controlled permissions</span></div>
+  <div class="glossary-item"><span class="glossary-term">DREAD</span><span class="glossary-def">Damage, Reproducibility, Exploitability, Affected users, Discoverability</span></div>
+  <div class="glossary-item"><span class="glossary-term">Golden Ticket</span><span class="glossary-def">Forged TGT granting domain-wide admin access</span></div>
+  <div class="glossary-item"><span class="glossary-term">Honeywords</span><span class="glossary-def">Fake passwords stored alongside real one to detect breaches</span></div>
+  <div class="glossary-item"><span class="glossary-term">KBA</span><span class="glossary-def">Knowledge-Based Authentication — security questions (weak)</span></div>
+  <div class="glossary-item"><span class="glossary-term">KDC</span><span class="glossary-def">Key Distribution Center — contains AS + TGS in Kerberos</span></div>
+  <div class="glossary-item"><span class="glossary-term">Key Stretching</span><span class="glossary-def">Making hash computation intentionally slow (bcrypt, scrypt)</span></div>
+  <div class="glossary-item"><span class="glossary-term">MAC</span><span class="glossary-def">Mandatory Access Control — system-wide policy overrides user</span></div>
+  <div class="glossary-item"><span class="glossary-term">MLS</span><span class="glossary-def">Multi-Level Security — handling data at different classifications</span></div>
+  <div class="glossary-item"><span class="glossary-term">NHI</span><span class="glossary-def">Non-Human Identity — service accounts with own credentials</span></div>
+  <div class="glossary-item"><span class="glossary-term">NIS</span><span class="glossary-def">Network Information Service (Yellow Pages) — insecure legacy auth</span></div>
+  <div class="glossary-item"><span class="glossary-term">NTLM</span><span class="glossary-def">NT LAN Manager hash — v1 vulnerable to pass-the-hash</span></div>
+  <div class="glossary-item"><span class="glossary-term">OSINT</span><span class="glossary-def">Open-Source Intelligence — publicly available information gathering</span></div>
+  <div class="glossary-item"><span class="glossary-term">PAM</span><span class="glossary-def">Pluggable Authentication Modules — Linux auth framework</span></div>
+  <div class="glossary-item"><span class="glossary-term">Rainbow Table</span><span class="glossary-def">Pre-computed hash lookup using family of reduction functions</span></div>
+  <div class="glossary-item"><span class="glossary-term">Salt</span><span class="glossary-def">Random value added to password before hashing (unique per user)</span></div>
+  <div class="glossary-item"><span class="glossary-term">scrypt</span><span class="glossary-def">Slow hash requiring large memory — resists GPU attacks</span></div>
+  <div class="glossary-item"><span class="glossary-term">setuid</span><span class="glossary-def">Permission bit — program runs as file owner, not executing user</span></div>
+  <div class="glossary-item"><span class="glossary-term">Side Channel</span><span class="glossary-def">Info leakage via physical phenomena (timing, power, RF, cache)</span></div>
+  <div class="glossary-item"><span class="glossary-term">STRIDE</span><span class="glossary-def">Spoof, Tamper, Repudiation, Info Disclosure, DoS, Elevation</span></div>
+  <div class="glossary-item"><span class="glossary-term">TGS</span><span class="glossary-def">Ticket Granting Server — issues service tickets (part of KDC)</span></div>
+  <div class="glossary-item"><span class="glossary-term">TGT</span><span class="glossary-def">Ticket Granting Ticket — proof of identity for Kerberos</span></div>
+  <div class="glossary-item"><span class="glossary-term">TOTP</span><span class="glossary-def">Time-based One-Time Password — HMAC-based rotating codes</span></div>
+  <div class="glossary-item"><span class="glossary-term">U2F</span><span class="glossary-def">Universal 2nd Factor — hardware security key standard</span></div>
+  <div class="glossary-item"><span class="glossary-term">VSD</span><span class="glossary-def">Value Sensitive Design — values-based outlook for technology design</span></div>
+  <div class="glossary-item"><span class="glossary-term">★-Property</span><span class="glossary-def">Bell-LaPadula: no write down (prevents leaking to lower levels)</span></div>
+</div>
+</section>
+
+<!-- ══════════ PRACTICE ══════════ -->
+<section id="practice" data-section data-category="all">
+<h2 class="sec"><span class="sec-icon" style="background:var(--accent-light)">🧠</span>Practice Questions</h2>
+<p>Click to reveal answers.</p>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why are salted passwords more secure than unsalted hashes?</div><div class="quiz-a">Each user has a unique random salt → identical passwords produce different hashes. Pre-computed tables useless. Attacker must brute-force each password individually.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What are the two parts of the Kerberos KDC?</div><div class="quiz-a">Authentication Server (AS) — verifies identity, issues TGTs. Ticket Granting Server (TGS) — issues service tickets for specific resources.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why are biometrics fundamentally problematic as authentication?</div><div class="quiz-a">Immutable — you can't change your fingerprint. Once compromised, no reset possible. Passwords and tokens can be revoked/replaced.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Explain the Confused Deputy Problem and its solution.</div><div class="quiz-a">A setuid program serves two principals and can't distinguish which one. Malicious user tricks it into using root's permissions on unauthorized resources. Solution: capability-based access control — no ambient authority, must explicitly pass capabilities.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">State Bell-LaPadula's ★-property and its purpose.</div><div class="quiz-a">"No write down" — subjects can only write to objects at their level or above. Prevents classified information from leaking to lower classification levels.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Compare Bell-LaPadula and Biba.</div><div class="quiz-a">BLP = confidentiality ("read down, write up"), controls reads. Biba = integrity ("read up, write down"), controls writes. BLP doesn't require trusted subjects; Biba does.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why is SMS 2FA deprecated?</div><div class="quiz-a">SIM hijacking — attacker social-engineers the phone company into activating a new SIM, redirecting all calls/SMS to attacker's phone.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What is STRIDE?</div><div class="quiz-a">Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege — Microsoft's threat categorization framework.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why does scrypt resist GPU attacks better than bcrypt?</div><div class="quiz-a">scrypt requires large amounts of memory per computation. GPUs have limited memory per core, making parallel brute-force impractical.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why do 419 scammers use absurd pretexts intentionally?</div><div class="quiz-a">Per Herley: victim density is very low, and false positives are costly. Absurd pretexts self-select the most gullible, minimizing false positives while preserving true positives.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What is a Golden Ticket attack?</div><div class="quiz-a">Forged TGT created by compromising the KRBTGT account. Grants unlimited admin access to any resource in the entire Active Directory domain.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why can't Bell-LaPadula prevent covert channels?</div><div class="quiz-a">★-property only prevents overt read/write leakage. Covert channels exploit observable side effects (file existence, timing, cache) outside the formal access control model.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What are Bell-LaPadula's four properties?</div><div class="quiz-a">1) Simple Security (no read up), 2) ★-property (no write down), 3) Discretionary Security (access matrix allows it), 4) Tranquility (levels never decrease).</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What does chmod 750 mean?</div><div class="quiz-a">Owner: rwx (4+2+1=7). Group: r-x (4+0+1=5). Other: nothing (0).</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What is emotional hijacking in social engineering?</div><div class="quiz-a">A sudden emotional trigger (surprise, fear, joy) overrides logical thinking. Attackers use it to make victims act before they can analyze the situation critically.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">How is the Needham-Schroeder replay attack fixed?</div><div class="quiz-a">Add timestamps. Bob only accepts requests with fresh timestamps, preventing replay of old messages with stolen session keys.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What are honeywords and how do they detect breaches?</div><div class="quiz-a">Fake passwords stored alongside the real one. A separate honeyserver knows which is real. If attacker cracks and uses a honeyword → alert proves database was stolen.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">In "Social Phishing," what were the success rates?</div><div class="quiz-a">Generic email: 16%. Spoofed from a friend: 72% — over 4x more effective.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why can't all policies be encoded in Unix permissions?</div><div class="quiz-a">Only 3 permission levels (owner, group, other). If 4+ distinct privilege levels needed → impossible. Also, owners can always grant themselves more permissions.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What are the 5 steps of VSD?</div><div class="quiz-a">1) Identify stakeholders, 2) Identify values at stake, 3) Find tradeoffs, 4) Prioritize values, 5) Repeat as circumstances change.</div></div>
+</section>
+
+</main>
+</div>
+
+<!-- Back to top -->
+<button class="to-top" id="toTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// ── Search ──
+const searchInput = document.getElementById('searchInput');
+const searchCount = document.getElementById('searchCount');
+const allSearchable = document.querySelectorAll('[data-searchable]');
+const allSections = document.querySelectorAll('[data-section]');
+
+function doSearch(query) {
+  // Clear previous highlights
+  document.querySelectorAll('mark').forEach(m => {
+    const parent = m.parentNode;
+    parent.replaceChild(document.createTextNode(m.textContent), m);
+    parent.normalize();
+  });
+
+  if (!query.trim()) {
+    allSections.forEach(s => s.style.display = '');
+    allSearchable.forEach(el => el.classList.remove('no-match'));
+    searchCount.textContent = '';
+    return;
+  }
+
+  const q = query.toLowerCase();
+  let matchCount = 0;
+  const matchedSections = new Set();
+
+  allSearchable.forEach(el => {
+    const text = el.textContent.toLowerCase();
+    if (text.includes(q)) {
+      el.classList.remove('no-match');
+      matchCount++;
+      const section = el.closest('[data-section]');
+      if (section) matchedSections.add(section);
+      // Highlight
+      highlightText(el, query);
+    } else {
+      el.classList.add('no-match');
+    }
+  });
+
+  // Show/hide sections
+  allSections.forEach(s => {
+    if (matchedSections.has(s)) {
+      s.style.display = '';
+    } else {
+      // Check if the section header itself matches
+      const heading = s.querySelector('h2');
+      if (heading && heading.textContent.toLowerCase().includes(q)) {
+        s.style.display = '';
+      } else {
+        s.style.display = 'none';
+      }
+    }
+  });
+
+  searchCount.textContent = matchCount ? `${matchCount} matches` : 'No results';
+}
+
+function highlightText(el, query) {
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  textNodes.forEach(node => {
+    const idx = node.textContent.toLowerCase().indexOf(query.toLowerCase());
+    if (idx >= 0) {
+      const span = document.createElement('mark');
+      const after = node.splitText(idx);
+      const matched = after.splitText(query.length);
+      span.textContent = after.textContent;
+      after.parentNode.replaceChild(span, after);
+    }
+  });
+}
+
+let searchTimeout;
+searchInput.addEventListener('input', () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => doSearch(searchInput.value), 150);
+});
+
+// ⌘K shortcut
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+  if (e.key === 'Escape') {
+    searchInput.value = '';
+    doSearch('');
+    searchInput.blur();
+  }
+});
+
+// ── Category filter chips ──
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    const filter = chip.dataset.filter;
+    allSections.forEach(s => {
+      if (filter === 'all' || s.dataset.category === filter) {
+        s.style.display = '';
+      } else {
+        s.style.display = 'none';
+      }
+    });
+    // Clear search when filtering
+    searchInput.value = '';
+    doSearch('');
+  });
+});
+
+// ── Expand / Collapse all ──
+function expandAll() { document.querySelectorAll('details').forEach(d => d.open = true); document.querySelectorAll('.quiz').forEach(q => q.classList.add('open')); }
+function collapseAll() { document.querySelectorAll('details').forEach(d => d.open = false); document.querySelectorAll('.quiz').forEach(q => q.classList.remove('open')); }
+
+// ── Active nav highlight ──
+const navItems = document.querySelectorAll('.nav-item');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navItems.forEach(n => n.classList.remove('active'));
+      const link = document.querySelector(`.nav-item[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.15, rootMargin: '-60px 0px -60% 0px' });
+allSections.forEach(s => observer.observe(s));
+
+// ── Scroll to top button ──
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  toTop.classList.toggle('visible', window.scrollY > 400);
+});
+
+// ── Embedded mode (when loaded inside study tool) ──
+if (window.location.search.includes('embed=1') || window.location.hash.includes('embed') || window.self !== window.top) {
+  document.documentElement.classList.add('embedded');
+}
+</script>
+</body>
+</html>
