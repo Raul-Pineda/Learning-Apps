@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CY 2550 — Study Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--c0:#FAF8F4;--c1:#F4F1EA;--c2:#EDE9E0;--wh:#FEFDFB;--k:#2C2418;--k2:#4A4236;--k3:#7A7264;--k4:#A69E92;--k5:#C8C2B8;--rl:#DDD7CC;--tr:#B8502D;--trb:#FDF2EE;--nv:#2B4D7A;--nvb:#EFF4FA;--fr:#3A7252;--frb:#EEF6F1;--pl:#6E4B8A;--plb:#F4F0F8;--oc:#8B6914;--ocb:#FBF6E8;--se:'Source Serif 4',Georgia,serif;--sa:'Instrument Sans',-apple-system,sans-serif;--mo:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--sa);background:var(--c1);color:var(--k);font-size:14.5px;line-height:1.68;-webkit-font-smoothing:antialiased}::selection{background:rgba(184,80,45,.15)}
+.top{position:fixed;top:0;left:0;z-index:600;height:52px;width:50%;max-width:50vw;background:#FDFBF7;border-bottom:1px solid #ddd5c8;display:flex;align-items:center;padding:0 16px;gap:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.tt{font:700 14px/1 var(--se);color:var(--tr);white-space:nowrap;flex-shrink:0}.sep{width:1px;height:24px;background:var(--rl);flex-shrink:0}
+.modes{display:flex;gap:3px;overflow-x:auto;overflow-y:hidden;flex:1;min-width:0;scrollbar-width:none;-ms-overflow-style:none}.modes::-webkit-scrollbar{display:none}.mb{background:none;border:1px solid var(--c2);border-radius:6px;padding:5px 10px;font:600 11px/1 var(--sa);color:var(--k3);cursor:pointer;transition:all .12s;white-space:nowrap;flex-shrink:0}.mb:hover{background:var(--c0);color:var(--k)}.mb.on{background:var(--tr);color:#fff;border-color:var(--tr)}
+.sts{margin-left:auto;display:flex;gap:14px;font:600 12px/1 var(--sa);color:var(--k3)}.sts .v{color:var(--tr);font:700 14px/1 var(--mo)}
+.mn{max-width:720px;margin:0 auto;padding:68px 20px 100px}
+.cd{background:var(--wh);border:1px solid var(--rl);border-radius:12px;box-shadow:0 2px 12px rgba(44,36,24,.05);padding:28px;margin-bottom:16px;position:relative}
+.cd::before{content:'';position:absolute;inset:0;border-radius:12px;background:repeating-linear-gradient(0deg,transparent,transparent 27px,var(--c2) 27px,var(--c2) 28px);opacity:.1;pointer-events:none}
+.qx{font:600 17px/1.45 var(--se);color:var(--k);margin-bottom:16px}
+.sc{font:400 13.5px/1.6 var(--sa);color:var(--k2);background:var(--c0);border:1px solid var(--c2);border-radius:8px;padding:14px;margin-bottom:14px}
+.ax{width:100%;min-height:90px;padding:12px 14px;border:2px solid var(--c2);border-radius:8px;font:14px/1.6 var(--sa);color:var(--k);background:var(--c0);resize:vertical;outline:none;transition:border-color .15s}.ax:focus{border-color:var(--nv);background:var(--wh)}.ax::placeholder{color:var(--k5)}.ax[readonly]{opacity:.8}
+.rb{margin-top:16px;padding:16px;border-radius:10px;display:none;border:1px solid}.rb.show{display:block}
+.rb-title{font:700 11px/1 var(--sa);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.rb-sub{font:400 11px/1.4 var(--sa);color:var(--k4);margin-bottom:10px}
+.rub{display:flex;flex-direction:column;gap:6px}
+.ri{display:flex;gap:8px;align-items:flex-start;font-size:13px;padding:8px 10px;border-radius:6px;background:var(--c0);border:1px solid var(--c2);cursor:pointer;transition:all .15s;user-select:none}.ri:hover{border-color:var(--k5)}
+.ri.yes{background:var(--frb);border-color:rgba(58,114,82,.3)}.ri.no{background:var(--trb);border-color:rgba(184,80,45,.3)}
+.ri-box{width:20px;height:20px;border:2px solid var(--k5);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;margin-top:1px;transition:all .12s}
+.ri.yes .ri-box{border-color:var(--fr);background:var(--fr);color:#fff}.ri.no .ri-box{border-color:var(--tr);background:var(--tr);color:#fff}
+.ri-text{flex:1;line-height:1.5}.ri-text b{display:block;font-size:12px;margin-bottom:2px}
+.ri-kw{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}
+.kw{font:500 10px/1 var(--mo);padding:2px 5px;border-radius:3px;background:var(--c2);color:var(--k3)}.kw.hit{background:var(--frb);color:var(--fr);font-weight:700}.kw.miss{background:var(--trb);color:var(--tr)}
+.model{margin-top:14px;padding:14px;border-radius:8px;background:var(--c0);border:1px solid var(--c2)}
+.model summary{font:700 12px/1 var(--sa);color:var(--k3);cursor:pointer;text-transform:uppercase;letter-spacing:.5px}
+.model .inner{margin-top:10px;font-size:13px;color:var(--k2);line-height:1.65}.model .inner p{margin-bottom:6px}
+.mk{margin-top:10px;font-size:12px;color:var(--tr);padding:8px 12px;background:var(--trb);border-radius:6px}.mk b{display:block;font:700 10px/1 var(--sa);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.score-bar{margin-top:14px;display:flex;align-items:center;gap:10px}.score-bar .fill{height:10px;border-radius:5px;flex:1;background:var(--c2);overflow:hidden}.score-bar .fill div{height:100%;border-radius:5px;transition:width .4s}.score-bar .pct{font:700 16px/1 var(--mo);min-width:48px;text-align:right}
+.bx{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.bn{padding:8px 16px;border-radius:8px;font:600 13px/1 var(--sa);cursor:pointer;transition:all .12s;border:none}.bp{background:var(--tr);color:#fff}.bp:hover{background:#a04528}.bs{background:var(--c0);color:var(--k2);border:1px solid var(--c2)}.bs:hover{background:var(--c2)}.bg{background:var(--fr);color:#fff}
+.bl{font:700 9px/1 var(--mo);text-transform:uppercase;letter-spacing:.5px;padding:2px 6px;border-radius:3px}.b3{background:var(--ocb);color:var(--oc)}.b4{background:var(--plb);color:var(--pl)}
+.pb{height:4px;background:var(--c2);border-radius:2px;margin-bottom:20px;overflow:hidden}.pf{height:100%;background:var(--tr);border-radius:2px;transition:width .3s}
+.tmr{font:700 16px/1 var(--mo);color:var(--tr)}.tmr.w{color:#c0392b;animation:pu 1s infinite}@keyframes pu{0%,100%{opacity:1}50%{opacity:.5}}
+.rs{text-align:center;padding:12px 0}.rs h2{font:700 24px/1.2 var(--se);margin-bottom:4px}
+.bd{display:flex;gap:16px;justify-content:center;margin:16px 0;flex-wrap:wrap}.bi{text-align:center}.bi .n{font:700 24px/1 var(--mo);display:block}.bi .l{font:600 10px/1 var(--sa);text-transform:uppercase;letter-spacing:.5px;color:var(--k4);margin-top:4px}
+.wk{margin-top:16px;text-align:left}.wk h3{font:700 13px/1 var(--sa);margin-bottom:6px}.wi{font-size:12px;padding:5px 10px;background:var(--trb);border-radius:4px;margin-bottom:3px;color:var(--tr);font-weight:600}
+.cm{margin-top:16px;padding:14px;background:var(--c0);border-radius:8px;border:1px solid var(--c2)}.cm h3{font:700 12px/1 var(--sa);color:var(--k3);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.cr2{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:12px}.cr2 .nm{font-weight:700;min-width:80px}.cr2 .br2{height:8px;border-radius:4px}.cr2 .pc{font:700 11px/1 var(--mo);min-width:32px}
+.st{text-align:center;padding:16px 0}.st h2{font:700 22px/1.2 var(--se);margin-bottom:6px}.st p{color:var(--k3);margin-bottom:16px;font-size:13.5px}
+.ch{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:12px 0}.ci2{font:600 11px/1 var(--sa);padding:4px 10px;border-radius:4px;background:var(--c0);border:1px solid var(--c2);color:var(--k3);cursor:pointer;transition:all .12s;user-select:none}.ci2:hover,.ci2.on{background:var(--nvb);color:var(--nv);border-color:var(--nv)}
+.cf{display:flex;gap:12px;justify-content:center;align-items:center;margin:12px 0;flex-wrap:wrap}.cf label{font:600 12px/1 var(--sa);color:var(--k3)}.cf select{padding:5px 10px;border:1px solid var(--c2);border-radius:6px;font:500 13px/1 var(--sa);background:var(--c0);color:var(--k);cursor:pointer}
+.grade-ring{width:120px;height:120px;margin:16px auto;position:relative}.grade-ring svg{transform:rotate(-90deg)}.grade-ring .letter{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 48px/1 var(--mo)}
+.gd{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}.gd-item{padding:10px;border-radius:8px;background:var(--c0);border:1px solid var(--c2)}.gd-item .gd-label{font:600 10px/1 var(--sa);text-transform:uppercase;letter-spacing:.5px;color:var(--k4);margin-bottom:4px}.gd-item .gd-val{font:700 18px/1 var(--mo)}.gd-item .gd-bar{height:6px;border-radius:3px;background:var(--c2);margin-top:6px;overflow:hidden}.gd-item .gd-bar div{height:100%;border-radius:3px}
+.reason-tag{display:inline-block;font:600 10px/1 var(--mo);padding:2px 6px;border-radius:3px;margin-left:6px}
+@media(max-width:600px){.mn{padding:68px 10px 80px}.cd{padding:18px 14px}.qx{font-size:15px}.sts{display:none}.gd{grid-template-columns:1fr}}
+
+/* ═══════════════════════════════════════════════════════════════
+   NOTES STYLES (scoped under .notes-wrap)
+   ═══════════════════════════════════════════════════════════════ */
+.notes-wrap {
+  --paper: #FDFBF7;
+  --paper-warm: #F8F5EE;
+  --paper-edge: #EDE8DD;
+  --ink: #1a1a1a;
+  --ink-light: #4a4a4a;
+  --ink-muted: #7a7a7a;
+  --ink-faint: #b0a898;
+  --rule: #ddd5c8;
+  --accent: #b44a2f;
+  --accent-light: #fdf0ec;
+  --blue: #2860a8;
+  --blue-light: #edf2fb;
+  --green: #2a7a4b;
+  --green-light: #eef7f1;
+  --purple: #6b4fa0;
+  --purple-light: #f4f0fa;
+  --amber: #946b2d;
+  --amber-light: #fdf6e8;
+  --red: #b83230;
+  --red-light: #fdf0f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+  font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+  color: var(--ink);
+  line-height: 1.72;
+  font-size: 15px;
+}
+
+/* Top bar adjustments for notes mode */
+.top.notes-active {
+  width: 100% !important;
+  max-width: 100vw !important;
+}
+
+.notes-search-wrap {
+  flex: 1;
+  max-width: 400px;
+  position: relative;
+  margin-left: auto;
+}
+
+.notes-search-wrap input {
+  width: 100%;
+  padding: 7px 12px 7px 32px;
+  border: 1px solid var(--c2);
+  border-radius: 7px;
+  font: 13px/1 var(--sa);
+  background: var(--c0);
+  color: var(--k);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.notes-search-wrap input:focus {
+  border-color: #2860a8;
+  box-shadow: 0 0 0 3px rgba(40,96,168,.1);
+  background: #fff;
+}
+
+.notes-search-wrap input::placeholder { color: var(--k4); }
+
+.notes-search-wrap .ns-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--k4);
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.notes-search-count {
+  font: 600 11px/1 var(--mo);
+  color: var(--k3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.notes-nav-btns {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.notes-nav-btns button {
+  background: none;
+  border: 1px solid var(--c2);
+  border-radius: 6px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font: 600 11px/1 var(--sa);
+  color: var(--k3);
+  transition: all .12s;
+}
+
+.notes-nav-btns button:hover { background: var(--c0); color: var(--k); }
+
+.notes-wrap {
+  --paper: #FDFBF7;
+  --paper-warm: #F8F5EE;
+  --paper-edge: #EDE8DD;
+  --ink: #1a1a1a;
+  --ink-light: #4a4a4a;
+  --ink-muted: #7a7a7a;
+  --ink-faint: #b0a898;
+  --rule: #ddd5c8;
+  --accent: #b44a2f;
+  --accent-light: #fdf0ec;
+  --blue: #2860a8;
+  --blue-light: #edf2fb;
+  --green: #2a7a4b;
+  --green-light: #eef7f1;
+  --purple: #6b4fa0;
+  --purple-light: #f4f0fa;
+  --amber: #946b2d;
+  --amber-light: #fdf6e8;
+  --red: #b83230;
+  --red-light: #fdf0f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-lg: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+}.notes-wrap * { margin: 0; padding: 0; box-sizing: border-box; }/* ── Top bar with search ── */
+.notes-wrap .search-wrap {
+  flex: 1;
+  max-width: 480px;
+  position: relative;
+}.notes-wrap .search-wrap input {
+  width: 100%;
+  padding: 8px 14px 8px 36px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--paper-warm);
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}.notes-wrap .search-wrap input:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(40,96,168,0.1);
+  background: #fff;
+}.notes-wrap .search-wrap input::placeholder { color: var(--ink-muted); }.notes-wrap .search-wrap .search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-muted);
+  font-size: 14px;
+  pointer-events: none;
+}.notes-wrap .search-wrap .search-hint {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 11px;
+  color: var(--ink-faint);
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 1px 6px;
+  pointer-events: none;
+}.notes-wrap .search-results-count {
+  font-size: 12px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 80px;
+  text-align: right;
+}/* ── Layout ── */
+.notes-wrap .layout {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 0;
+}/* ── Sidebar ── */
+.notes-wrap .sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+  padding: 20px 8px 40px 12px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--rule) transparent;
+}.notes-wrap .sidebar::-webkit-scrollbar { width: 4px; }.notes-wrap .sidebar::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 4px; }.notes-wrap .nav-group { margin-bottom: 16px; }.notes-wrap .nav-group-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-faint);
+  font-weight: 700;
+  padding: 4px 10px;
+  margin-bottom: 2px;
+}.notes-wrap .nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--ink-light);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.12s;
+  line-height: 1.4;
+}.notes-wrap .nav-item:hover { background: var(--paper-warm); color: var(--ink); }.notes-wrap .nav-item.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }.notes-wrap .nav-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}/* ── Main content ── */
+.notes-wrap .content {
+  flex: 1;
+  min-width: 0;
+  background: var(--paper);
+  border-left: 1px solid var(--paper-edge);
+  border-right: 1px solid var(--paper-edge);
+  box-shadow: var(--shadow);
+  padding: 40px 52px 100px;
+}/* ── Hero ── */
+.notes-wrap .hero {
+  padding-bottom: 32px;
+  margin-bottom: 40px;
+  border-bottom: 2px solid var(--rule);
+}.notes-wrap .hero h1 {
+  font-family: 'Newsreader', serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}.notes-wrap .hero .sub {
+  font-size: 17px;
+  color: var(--ink-muted);
+  margin-top: 8px;
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+}.notes-wrap .hero .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}.notes-wrap .chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--rule);
+  color: var(--ink-muted);
+  background: var(--paper-warm);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}.notes-wrap .chip:hover, .notes-wrap .chip.active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }/* ── Sections ── */
+.notes-wrap .notes-wrap section[id] { scroll-margin-top: 72px; }.notes-wrap .section-anchor {
+  display: block;
+  position: relative;
+  top: -72px;
+  visibility: hidden;
+  height: 0;
+}.notes-wrap h2.sec {
+  font-family: 'Newsreader', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 48px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}.notes-wrap h2.sec .sec-icon {
+  font-size: 20px;
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+}.notes-wrap h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 28px 0 10px;
+  letter-spacing: -0.2px;
+}.notes-wrap h4 {
+  font-size: 15px;
+  font-weight: 700;
+  margin: 16px 0 6px;
+}.notes-wrap p { margin-bottom: 10px; }.notes-wrap strong { font-weight: 600; }/* ── Searchable paragraphs ── */
+[data-searchable] { position: relative; }.notes-wrap mark {
+  background: #ffe066;
+  color: inherit;
+  padding: 1px 2px;
+  border-radius: 2px;
+}.notes-wrap .no-match { display: none !important; }
+/* ── Tables ── */
+.notes-wrap table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0;
+  font-size: 13.5px;
+}.notes-wrap thead th {
+  background: var(--paper-warm);
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-muted);
+  border-bottom: 2px solid var(--rule);
+}.notes-wrap td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--paper-edge);
+  vertical-align: top;
+}.notes-wrap tbody tr:hover td { background: var(--paper-warm); }/* ── Cards ── */
+.notes-wrap .card-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}.notes-wrap .card {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  border-radius: 10px;
+  padding: 14px 16px;
+}.notes-wrap .card h4 { margin-top: 0; font-size: 14px; }.notes-wrap .card p { font-size: 13px; color: var(--ink-light); margin-bottom: 0; }/* ── Callouts ── */
+.notes-wrap .callout {
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 14px 0;
+  border-left: 3px solid;
+  font-size: 13.5px;
+}.notes-wrap .callout-key { background: var(--blue-light); border-color: var(--blue); }.notes-wrap .callout-warn { background: var(--amber-light); border-color: var(--amber); }.notes-wrap .callout-attack { background: var(--red-light); border-color: var(--red); }.notes-wrap .callout-def { background: var(--green-light); border-color: var(--green); }.notes-wrap .callout b { display: block; margin-bottom: 3px; }
+/* ── Code ── */
+.notes-wrap code {
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--accent);
+}/* ── Flow diagrams ── */
+.notes-wrap .flow-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 14px 0;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  border-radius: 10px;
+  padding: 16px 20px;
+  font-size: 13.5px;
+}.notes-wrap .flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+}.notes-wrap .flow-step:not(:last-child) { border-bottom: 1px dashed var(--rule); }.notes-wrap .flow-num {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}/* ── Comparison boxes ── */
+.notes-wrap .vs-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  margin: 14px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--paper-edge);
+}.notes-wrap .vs-side { padding: 16px 18px; font-size: 13.5px; }.notes-wrap .vs-side:first-child { background: var(--blue-light); border-right: 1px solid var(--paper-edge); }.notes-wrap .vs-side:last-child { background: var(--purple-light); }.notes-wrap .vs-side h4 { margin-top: 0; }/* ── Tags ── */
+.notes-wrap .tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}.notes-wrap .tag-r { background: var(--red-light); color: var(--red); }.notes-wrap .tag-b { background: var(--blue-light); color: var(--blue); }.notes-wrap .tag-g { background: var(--green-light); color: var(--green); }.notes-wrap .tag-a { background: var(--amber-light); color: var(--amber); }.notes-wrap .tag-p { background: var(--purple-light); color: var(--purple); }
+/* ── Collapsible details ── */
+.notes-wrap details {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  border-radius: 8px;
+  margin: 10px 0;
+}.notes-wrap details summary {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-light);
+}.notes-wrap details summary::-webkit-details-marker { display: none; }.notes-wrap details summary::before { content: '▸'; color: var(--ink-faint); font-size: 12px; transition: transform 0.15s; }.notes-wrap details[open] summary::before { transform: rotate(90deg); }.notes-wrap details > div { padding: 0 16px 12px; font-size: 13.5px; }/* ── Quiz questions ── */
+.notes-wrap .quiz {
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}.notes-wrap .quiz:hover { border-color: var(--blue); }.notes-wrap .quiz-q {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  display: flex;
+  gap: 8px;
+}.notes-wrap .quiz-q::before {
+  content: 'Q';
+  background: var(--accent);
+  color: white;
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}.notes-wrap .quiz-a {
+  display: none;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--rule);
+  font-size: 13.5px;
+  color: var(--green);
+  line-height: 1.6;
+}.notes-wrap .quiz.open .quiz-a { display: block; }.notes-wrap .quiz.open { border-color: var(--green); background: var(--green-light); }/* ── Glossary index ── */
+.notes-wrap .glossary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 8px;
+  margin: 14px 0;
+}.notes-wrap .glossary-item {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  background: var(--paper-warm);
+  border: 1px solid var(--paper-edge);
+}.notes-wrap .glossary-term {
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  min-width: 80px;
+}.notes-wrap .glossary-def { color: var(--ink-light); }/* ── Jump-to-top ── */
+.notes-wrap .to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  color: var(--ink-muted);
+  transition: all 0.15s;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 150;
+}.notes-wrap .to-top.visible { opacity: 1; pointer-events: auto; }.notes-wrap .to-top:hover { background: var(--accent-light); color: var(--accent); }
+
+/* ── Print styles ── */
+@media print {.notes-wrap .topbar, .notes-wrap .sidebar, .notes-wrap .to-top, .notes-wrap .search-wrap { display: none !important; }.notes-wrap .content { border: none; box-shadow: none; padding: 20px; }.notes-wrap .layout { display: block; }.notes-wrap .quiz-a { display: block !important; }
+  
+}
+
+/* ── Mobile ── */
+@media (max-width: 900px) {.notes-wrap .sidebar { display: none; }.notes-wrap .content { padding: 24px 20px 80px; }.notes-wrap .hero h1 { font-size: 28px; }.notes-wrap .card-row { grid-template-columns: 1fr; }.notes-wrap .vs-box { grid-template-columns: 1fr; }.notes-wrap .glossary-grid { grid-template-columns: 1fr; }.notes-wrap .search-wrap .search-hint { display: none; }
+  
+}
+@media (max-width: 640px) {
+
+}
+
+
+/* Override .notes-wrap layout positioning */
+.notes-wrap .layout {
+  display: flex;
+  max-width: 100%;
+  margin: 0;
+  gap: 0;
+}
+
+.notes-wrap .sidebar {
+  position: fixed;
+  top: 52px;
+  left: 0;
+  width: 220px;
+  height: calc(100vh - 52px);
+  overflow-y: auto;
+  padding: 20px 8px 40px 12px;
+  scrollbar-width: thin;
+  background: #EFEBE3;
+  z-index: 50;
+}
+
+.notes-wrap .content {
+  margin-left: 220px;
+  flex: 1;
+  min-width: 0;
+  background: var(--paper);
+  border-left: 1px solid var(--paper-edge);
+  border-right: 1px solid var(--paper-edge);
+  box-shadow: var(--shadow);
+  padding: 40px 52px 100px;
+}
+
+.notes-wrap section[id] { scroll-margin-top: 72px; }
+
+.notes-wrap .to-top {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow);
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.2s;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notes-wrap .to-top.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Notes mode: hide main area margin, use full page */
+.notes-wrap {
+  position: fixed;
+  top: 52px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  background: #EFEBE3;
+  z-index: 50;
+}
+
+.notes-wrap mark {
+  background: #ffe066;
+  color: inherit;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
+.notes-wrap .no-match { display: none !important; }
+
+@media(max-width:900px) {
+  .notes-wrap .sidebar { display: none; }
+  .notes-wrap .content { margin-left: 0; padding: 24px 16px 80px; }
+}
+
+@media(max-width:600px) {
+  .notes-search-wrap { max-width: 160px; }
+}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <span class="tt">CY 2550 Midterm</span><span class="sep"></span>
+  <div class="modes" id="md2"></div>
+  <div class="sts">Q's <span class="v" id="std">0</span></div>
+</header>
+<div class="mn" id="app"></div>
+<script>
+const P=a=>a[Math.floor(Math.random()*a.length)];
+const S=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+const R=(lo,hi)=>lo+Math.floor(Math.random()*(hi-lo+1));
+const T={linux:{n:'Linux & GPG'},auth:{n:'Authentication'},pwstore:{n:'Password Storage'},pwcrack:{n:'Password Cracking'},bio2fa:{n:'Biometrics & 2FA'},distauth:{n:'Distributed Auth'},kerberos:{n:'Kerberos'},ac:{n:'Access Control'},mac:{n:'MAC / BLP / Biba'},covert:{n:'Covert & Side Ch.'},soceng:{n:'Social Engineering'},phishing:{n:'Phishing'},osint:{n:'OSINT'},threat:{n:'Threat Modeling'},vsd:{n:'Ethics & VSD'}};
+const USERS=['Alice','Bob','Carol','Dave','Eve','Mallory','Trent'];
+const FILES=['report.pdf','keys.db','config.ini','server.log','grades.txt','backup.tar','deploy.sh','secret.key','payroll.csv','audit.log'];
+const COMPANIES=['MegaCorp','StartupX','HealthNet','BankSecure','UniTech','GovCloud','RetailCo','DevShop'];
+const SERVICES=['email server','web app','database','file server','VPN gateway','print server','DNS server','API gateway'];
+const MAC=['Unclassified','Confidential','Secret','Top Secret'];
+const OCTAL={};
+for(let o=0;o<8;o++)for(let g=0;g<8;g++)for(let a=0;a<8;a++){
+  const k=''+o+g+a,sym=s=>(s&4?'r':'-')+(s&2?'w':'-')+(s&1?'x':'-');
+  OCTAL[k]={str:sym(o)+sym(g)+sym(a),o:sym(o),g:sym(g),a:sym(a)};
+}
+
+// ═══════════════════════════════════════════════════════════════
+// REASONING-AWARE GRADER
+// ═══════════════════════════════════════════════════════════════
+const CAUSAL=['because','therefore','since','so ','thus ','this means','which means','which causes','which prevents','which enables','which defeats','the reason','as a result','consequently','in order to','that\'s why','this is why','due to','leads to','results in','prevents','enables','defeats','ensures','blocks','negates'];
+
+function gradeAnswer(answer, rubric) {
+  const a = answer.toLowerCase().replace(/['']/g,"'").replace(/[""]/g,'"');
+  const wordCount = a.split(/\s+/).length;
+  const reasonCount = CAUSAL.filter(c => a.includes(c)).length;
+  const reasonScore = Math.min(1, reasonCount / Math.max(1, Math.ceil(wordCount / 20)));
+  const items = rubric.map(r => {
+    const hits = r.keys.filter(k => {
+      const kl = k.toLowerCase();
+      if (kl.includes('.*')) { try { return new RegExp(kl).test(a); } catch(e) { return false; } }
+      if (a.includes(kl)) return true;
+      if (/^\d+\.?\d*$/.test(kl)) { try { return new RegExp('\\b'+kl.replace('.','\\.')).test(a); } catch(e) { return false; } }
+      if (kl.length >= 4 && !/\s/.test(kl)) {
+        const words = a.split(/[\s,.:;!?()\[\]{}\\/\-]+/);
+        if (words.some(w => (w.length>=4 && w.startsWith(kl)) || (w.length>=4 && kl.startsWith(w) && w.length>=4))) return true;
+      }
+      const parts = kl.split(/\s+/).filter(w => w.length > 2);
+      if (parts.length > 1) return parts.filter(w => a.includes(w)).length >= Math.ceil(parts.length * 0.6);
+      return false;
+    });
+    return { ...r, hits, score: r.keys.length ? hits.length / r.keys.length : 0, pass: r.keys.length ? hits.length / r.keys.length >= 0.5 : false };
+  });
+  const contentScore = items.length ? items.filter(i=>i.pass).length / items.length : 0;
+  return { items, contentScore, reasonScore, reasonCount, wordCount, empty: wordCount < 5 };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SESSION TRACKER
+// ═══════════════════════════════════════════════════════════════
+const session = {
+  answers: [],
+  topicsSeen: new Set(),
+  add(tags, contentScore, reasonScore, timedOut, timeUsed, timeBudget) {
+    this.answers.push({tags,contentScore,reasonScore,timedOut,timeUsed,timeBudget});
+    tags.forEach(t => this.topicsSeen.add(t));
+  },
+  getGrade() {
+    const n = this.answers.length;
+    if (n < 3) return {letter:'?',pct:0,accuracy:0,reasoning:0,coverage:0,speed:0,confidence:'low',n};
+    const accuracy = this.answers.reduce((s,a) => s + a.contentScore, 0) / n;
+    const reasoning = this.answers.reduce((s,a) => s + a.reasonScore, 0) / n;
+    const practiceTopics = Object.keys(T);
+    const totalTopics = practiceTopics.length;
+    const coverage = practiceTopics.filter(t => this.topicsSeen.has(t)).length / totalTopics;
+    const timed = this.answers.filter(a => a.timeBudget > 0);
+    const speed = timed.length ? timed.filter(a => !a.timedOut && a.timeUsed < a.timeBudget * 0.9).length / timed.length : 0.5;
+    const pct = accuracy * 0.40 + reasoning * 0.25 + coverage * 0.20 + speed * 0.15;
+    const letter = pct >= 0.93 ? 'A' : pct >= 0.90 ? 'A-' : pct >= 0.87 ? 'B+' : pct >= 0.83 ? 'B' : pct >= 0.80 ? 'B-' : pct >= 0.77 ? 'C+' : pct >= 0.73 ? 'C' : pct >= 0.70 ? 'C-' : pct >= 0.67 ? 'D+' : pct >= 0.63 ? 'D' : pct >= 0.60 ? 'D-' : 'F';
+    const confidence = n >= 15 ? 'high' : n >= 8 ? 'medium' : 'low';
+    return {letter, pct: Math.round(pct*100), accuracy: Math.round(accuracy*100), reasoning: Math.round(reasoning*100), coverage: Math.round(coverage*100), speed: Math.round(speed*100), confidence, n, topicGaps: practiceTopics.filter(t => !this.topicsSeen.has(t))};
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════
+// GENERATORS — Full-sentence questions and answers
+// ═══════════════════════════════════════════════════════════════
+const GEN=[
+// 0: System security audit
+()=>{const co=P(COMPANIES),srv=P(SERVICES),hasSalt=P([true,false]),hasStretch=P([true,false]),has2FA=P([true,false]),hasHoney=P([true,false]);
+  const algo=hasSalt?(hasStretch?P(['bcrypt','scrypt']):'SHA-256 with per-user salt'):(hasStretch?'bcrypt (no salt)':'plain SHA-256');
+  const config=[algo,has2FA?'TOTP 2FA':'no 2FA',hasHoney?'honeywords':'no breach detection'].join(', ');
+  const vulns=[],defs=[];
+  if(!hasSalt){vulns.push('Rainbow tables and precomputed attacks are effective because identical passwords produce identical hashes.');vulns.push('Two users with the same password will have matching hashes in the database.')}else defs.push('Per-user salts defeat rainbow tables and precomputed hash lookups because each password produces a unique hash even if passwords are identical.');
+  if(!hasStretch){vulns.push('GPU brute-force attacks are fast because standard hash functions like SHA-256 can compute billions of hashes per second.')}else defs.push('The key-stretching algorithm intentionally slows down each hash computation, which makes brute-force attacks much more expensive.');
+  if(!has2FA){vulns.push('A stolen password alone grants full access because there is no second factor of authentication.')}else defs.push('TOTP two-factor authentication requires a time-based code in addition to the password, which means a stolen password alone is not enough.');
+  if(!hasHoney){vulns.push('If the database is stolen, there is no mechanism to detect the breach.')}else defs.push('Honeywords are decoy passwords stored alongside the real one, so if an attacker cracks and uses a honeyword, the separate honeyserver raises an alert.');
+  return{tags:['pwstore','pwcrack','bio2fa'],bloom:4,
+    q:`<div class="sc"><b>${co}</b> runs a ${srv}. Their password storage configuration uses <b>${config}</b>.</div>Suppose an attacker steals a copy of the entire password database. Please answer the following: (a) What specific attacks would be effective against this configuration, and why? (b) What aspects of this configuration are well-defended, and why? (c) What would you recommend as the single most important first action to improve security?`,
+    rubric:[
+      {check:hasSalt?'Salting defeats precomputation attacks':'No salt means rainbow tables and hash matching work',detail:hasSalt?'Per-user salt produces unique hashes for identical passwords.':'Precomputed attacks are effective against unsalted hashes.',keys:hasSalt?['salt','rainbow','precomput','per-user']:['rainbow','identical','precomput','no salt']},
+      {check:hasStretch?algo+' slows down brute-force attempts':'No key stretching means GPUs can try billions of hashes per second',detail:hasStretch?'Intentionally slow hash function.':'Standard hashes are too fast for password storage.',keys:hasStretch?['slow','brute','stretch']:['fast','gpu','brute','stretch']},
+      {check:has2FA?'TOTP blocks password-only access':'No second factor means a password alone grants full access',detail:has2FA?'A second factor is required beyond the password.':'Single-factor authentication is vulnerable.',keys:has2FA?['totp','second factor','2fa']:['no 2fa','single factor','full access']},
+      {check:hasHoney?'Honeywords detect database breaches':'No breach detection mechanism exists',detail:hasHoney?'A wrong index triggers an alert on the separate honeyserver.':'A stolen database can be cracked silently.',keys:hasHoney?['honey','alert','detect','separate']:['undetect','no.*detect','no honey']},
+      {check:'Identified at least one specific vulnerability or defense',detail:'Named a concrete attack or protection mechanism.',keys:vulns.length?['attack','vulnerable','possible','exploit']:['secure','well','defended','covered']},
+    ],answer:`<p><b>Vulnerabilities:</b> ${vulns.join(' ')||'There are no major vulnerabilities in this configuration.'}</p><p><b>Defenses:</b> ${defs.join(' ')}</p>`,mistake:'Remember that salting protects against precomputation attacks, while key stretching protects against brute-force attacks. These are two different defenses against two different threats.'};
+},
+
+// 1: chmod, setuid, and the Confused Deputy Problem
+()=>{const oct=''+R(4,7)+R(0,5)+R(0,5),p=OCTAL[oct];if(!p)return GEN[0]();
+  const user=P(USERS),prog=P(['turnin','backup_tool','report_gen','log_viewer']),hasSetuid=P([true,false]),target=P(FILES),role=P(['owner','group member','other user']);
+  const triplet=[p.o,p.g,p.a][role==='owner'?0:role==='group member'?1:2];
+  const canR=triplet[0]==='r',canW=triplet[1]==='w',canX=triplet[2]==='x';
+  return{tags:['linux','ac'],bloom:4,
+    q:`<div class="sc">The program <code>${prog}</code> has permission bits <code>${hasSetuid?'s':''}${oct}</code>${hasSetuid?' (with the setuid bit set)':''}. The user ${user} is a ${role} of this file.</div>Please answer the following in complete sentences: (a) What is the full symbolic notation for these permission bits? (b) What specific operations can ${user} perform on this program, and why? (c) ${hasSetuid?'What security concern arises if this setuid program writes to '+target+', and what is the underlying problem called?':'If the setuid bit were added to this program, what security risk would that introduce, and what is the name of the underlying problem?'}`,
+    rubric:[
+      {check:'The octal value '+oct+' translates to the symbolic notation '+p.str+'.',detail:'Each octal digit maps to a three-character rwx triplet: r=4, w=2, x=1.',keys:[p.str,p.o,p.g,p.a]},
+      {check:'As a '+role+', the user gets the permissions '+triplet+'.',detail:'Read: '+canR+', Write: '+canW+', Execute: '+canX+'.',keys:[triplet,canR?'can read':'cannot read',canW?'can write':'cannot write']},
+      {check:'The setuid bit causes the program to run with the permissions of the file owner (root), not the executing user.',detail:'This creates ambient authority because the program acts on behalf of two principals.',keys:['setuid','root','run as','owner']},
+      {check:'This is called the Confused Deputy Problem, where a program serving two principals cannot distinguish which one it is acting for.',detail:'A malicious user can trick the program into using root privileges on unauthorized resources.',keys:['confused deputy','ambient','two principal']},
+      {check:'Capability-based access control solves this problem by requiring explicit tokens of authority rather than ambient permissions.',detail:'Each operation requires an unforgeable capability token.',keys:['capabilit','token','explicit']},
+    ],answer:`<p>The octal permission ${oct} translates to the symbolic notation ${p.str}. As a ${role}, ${user} has the permission triplet ${triplet}, which means they ${canR?'can':'cannot'} read, ${canW?'can':'cannot'} write, and ${canX?'can':'cannot'} execute. ${hasSetuid?'Because the setuid bit is set, the program runs as root regardless of who executes it. This creates the Confused Deputy Problem, where the program serves two principals and cannot distinguish which one it is acting for, so a malicious user could trick it into misusing root privileges. Capability-based access control solves this by requiring explicit tokens of authority.':'If the setuid bit were added, the program would run as root for any user, creating ambient authority. This introduces the Confused Deputy Problem, which can be solved with capability-based access control.'}</p>`,mistake:'Remember that the execute permission on a directory means the ability to list its contents, which is different from execute on a file.'};
+},
+
+// 2: Password entropy calculation
+()=>{const N1=P([26,36,52,62,72,95]),L1=P([6,8,10,12,14]),N2=P([26,36,52,62,72,95].filter(x=>x!==N1)),L2=P([6,8,10,12,14].filter(x=>x!==L1));
+  const S1=(L1*Math.log2(N1)).toFixed(1),S2=(L2*Math.log2(N2)).toFixed(1),winner=parseFloat(S1)>parseFloat(S2)?'A':'B';
+  return{tags:['pwcrack'],bloom:3,
+    q:`Consider two passwords. Password A is ${L1} characters long and drawn from an alphabet of ${N1} possible characters. Password B is ${L2} characters long and drawn from an alphabet of ${N2} possible characters. Please answer the following: (a) What is the entropy of each password in bits, and how did you calculate it? (b) Which password is stronger against a brute-force attack, and why? (c) In general, why does increasing password length improve security more than increasing alphabet size?`,
+    rubric:[
+      {check:'Password A has an entropy of approximately '+S1+' bits, calculated as '+L1+' multiplied by log base 2 of '+N1+'.',keys:[S1,''+N1,''+L1,'log']},
+      {check:'Password B has an entropy of approximately '+S2+' bits, calculated as '+L2+' multiplied by log base 2 of '+N2+'.',keys:[S2,''+N2,''+L2]},
+      {check:'Password '+winner+' is stronger because it has higher entropy.',keys:[winner+' is stronger',winner+' stronger',winner+' wins',winner+' is more']},
+      {check:'Length matters more because it acts as the exponent in the formula N raised to the power of L, so adding one character multiplies the search space by a factor of N.',keys:['exponent','length','multiply','N^L','exponential']},
+    ],answer:`<p>Password A has an entropy of ${S1} bits because ${L1} times log base 2 of ${N1} equals ${S1}. Password B has an entropy of ${S2} bits because ${L2} times log base 2 of ${N2} equals ${S2}. Password ${winner} is stronger because it has higher entropy. In general, increasing length matters more than increasing alphabet size because length is the exponent in the total search space formula N raised to the power of L, which means each additional character multiplies the number of possibilities by the entire alphabet size.</p>`,mistake:'Helpful reference values: log base 2 of 26 is approximately 4.7, log base 2 of 62 is approximately 5.95, and log base 2 of 95 is approximately 6.57.'};
+},
+
+// 3: Bell-LaPadula and Biba access control models
+()=>{const model=P(['Bell-LaPadula','Biba']),uLevel=P(MAC),oLevel=P(MAC),ui=MAC.indexOf(uLevel),oi=MAC.indexOf(oLevel);
+  let canR,canW,rRule,wRule;
+  if(model==='Bell-LaPadula'){canR=ui>=oi;canW=ui<=oi;rRule='Simple Security (No Read Up)';wRule='Star-Property (No Write Down)'}else{canR=ui<=oi;canW=ui>=oi;rRule='Strict Integrity (No Read Down)';wRule='Strict Integrity (No Write Up)'}
+  const protects=model==='Bell-LaPadula'?'confidentiality':'integrity';
+  return{tags:['mac'],bloom:3,
+    q:`Under the <b>${model}</b> model, consider a subject with a clearance level of <b>${uLevel}</b> and a file classified at the <b>${oLevel}</b> level. Please answer in complete sentences: (a) Is the subject allowed to read this file? What is the name of the rule that governs this decision? (b) Is the subject allowed to write to this file? What is the name of the rule that governs this decision? (c) What security property does the ${model} model primarily protect, and why?`,
+    rubric:[
+      {check:'The subject '+(canR?'is allowed':'is not allowed')+' to read the file because of the '+rRule+' rule.',keys:[canR?'yes':'no','read',rRule.toLowerCase()]},
+      {check:'The subject '+(canW?'is allowed':'is not allowed')+' to write to the file because of the '+wRule+' rule.',keys:[canW?'yes':'no','write',wRule.toLowerCase()]},
+      {check:'The '+model+' model primarily protects '+protects+'.',keys:[protects]},
+      {check:'The answer names the specific rules rather than just stating the verdict.',keys:['no read','no write']},
+    ],answer:`<p>Under ${model}, a ${uLevel} subject ${canR?'is allowed':'is not allowed'} to read a ${oLevel} file. This is governed by the ${rRule} rule. The subject ${canW?'is allowed':'is not allowed'} to write to the file, which is governed by the ${wRule} rule. The ${model} model primarily protects ${protects}.</p>`,mistake:'Bell-LaPadula and Biba have opposite rules. Bell-LaPadula says "read down, write up" for confidentiality. Biba says "read up, write down" for integrity. They are mirror images of each other.'};
+},
+
+// 4: Kerberos compromise scenario
+()=>{const co=P(COMPANIES),srv=P(SERVICES);
+  const c=P([
+    {what:'a regular user\'s password',keys_can:['tgt','that user','authorized','their'],keys_cant:['cannot forge','other user','not admin'],keys_resp:['reset','password','investigate']},
+    {what:'the KRBTGT account hash',keys_can:['golden ticket','forge','any tgt','domain admin','impersonate'],keys_cant:['total','nothing','everything'],keys_resp:['rotate','krbtgt','twice','domain']},
+    {what:'a service account (NHI) credential',keys_can:['admin','service','extract','nhi','always-on'],keys_cant:['cannot forge','not other','no tgt'],keys_resp:['disable','rotate','audit']},
+    {what:'network access to the KDC machine',keys_can:['dos','deny','intercept'],keys_cant:['cannot forge','no keys','can\'t decrypt'],keys_resp:['segment','redundan','protect']},
+  ]);
+  return{tags:['kerberos','distauth'],bloom:4,
+    q:`${co} uses Kerberos to authenticate users for its ${srv}. An attacker has compromised <b>${c.what}</b>. Please answer the following in complete sentences: (a) What specific actions can the attacker now perform as a result of this compromise? (b) What actions is the attacker still unable to perform, and why? (c) What should the incident response team do to contain and remediate this compromise?`,
+    rubric:[
+      {check:'Described what the attacker can specifically do with this compromised credential.',keys:c.keys_can},
+      {check:'Identified what the attacker still cannot do and explained why.',keys:c.keys_cant},
+      {check:'Proposed appropriate incident response steps.',keys:c.keys_resp},
+    ],answer:`<p>With ${c.what} compromised, the attacker can ${c.keys_can.slice(0,2).join(' and ')}. However, the attacker cannot ${c.keys_cant.slice(0,2).join(' or ')} because additional credentials would be needed. The response team should ${c.keys_resp.slice(0,2).join(' and ')} immediately to contain the breach.</p>`,mistake:'Remember that a Golden Ticket attack requires compromising the KRBTGT account, not just any user account. The TGS is a server component, while the TGT is a ticket.'};
+},
+
+// 5: Find the security flaw in a system design
+()=>{const co=P(COMPANIES);const d=P([
+    {desc:co+' uses bcrypt with per-user salts to store passwords, but distributes credentials across the network using NIS (Yellow Pages).',keys_f:['nis','ypcat','expose','network','anyone'],keys_x:['kerberos','ldap','tls','replace']},
+    {desc:co+' uses Kerberos with TOTP two-factor authentication, but the KDC and the honeyserver are running on the same physical machine.',keys_f:['same machine','single','both','useless'],keys_x:['separate','physical','different']},
+    {desc:co+'\'s server application uses setuid root combined with ACL-based access control to manage file access for multiple users.',keys_f:['ambient','confused deputy','acl','root'],keys_x:['capabilit','token','explicit']},
+    {desc:co+' relies on fingerprint scanning as the only authentication factor for accessing their secure facility.',keys_f:['single factor','irrevocab','forge','gelatin','immutable'],keys_x:['second factor','add','multi']},
+    {desc:co+' stores passwords using SHA-256 with bcrypt key stretching, but uses a single global salt that is shared across all user accounts.',keys_f:['global','identical','same','all users','match'],keys_x:['per-user','unique','individual']},
+    {desc:co+' deploys Kerberos across its network but does not use NTP, and clocks across machines differ by as much as ten minutes.',keys_f:['replay','skew','timestamp','stale','window'],keys_x:['ntp','synchron','reduce']},
+  ]);
+  return{tags:Object.keys(T),bloom:4,
+    q:`<div class="sc"><b>System Description:</b> ${d.desc}</div>Please identify the security flaw in this system design. Answer in complete sentences: (a) What is the specific flaw, and why is it a problem? (b) What type of attack does this flaw enable? (c) How would you fix this flaw while preserving the system's functionality?`,
+    rubric:[
+      {check:'Identified the specific security flaw in the system design.',keys:d.keys_f},
+      {check:'Named the type of attack that this flaw enables.',keys:d.keys_f.slice(0,3)},
+      {check:'Proposed a concrete fix for the vulnerability.',keys:d.keys_x},
+    ],answer:`<p>The specific security flaw in this system is related to ${d.keys_f[0]}, which creates a vulnerability that an attacker can exploit to compromise the system. An attacker could leverage this weakness to gain unauthorized access or undermine the security guarantees the system is supposed to provide. To fix this flaw, the system should be reconfigured to ${d.keys_x[0]}, which would eliminate the vulnerability while preserving the intended functionality of the system.</p>`,mistake:'When identifying flaws, name the specific mechanism that fails and the specific attack it enables. Saying a system is "insecure" without explaining the mechanism is not sufficient.'};
+},
+
+// 6: GPG key operations and Web of Trust
+()=>{const u1=P(USERS),u2=P(USERS.filter(x=>x!==u1)),u3=P(USERS.filter(x=>x!==u1&&x!==u2));
+  const sc=P([
+    {s:u1+' wants to send '+u2+' a message that is both confidential and authenticated. '+u3+' is eavesdropping on the network.',
+     rubric:[{check:u1+' must sign the message with their own private key to prove authenticity.',keys:[u1.toLowerCase(),'private','sign']},{check:u1+' must encrypt the message with '+u2+'\'s public key so that only '+u2+' can read it.',keys:[u2.toLowerCase(),'public','encrypt']},{check:u3+' cannot read or forge the message because they lack '+u2+'\'s private key and '+u1+'\'s private key.',keys:[u3.toLowerCase(),'cannot','can\'t']}],answer:u1+' signs the message using their own private key to provide authentication, then encrypts the signed message using '+u2+'\'s public key to provide confidentiality. '+u3+' cannot read the message because they do not have '+u2+'\'s private key, and they cannot forge a signature because they do not have '+u1+'\'s private key.'},
+    {s:u1+' has signed '+u2+'\'s public key. '+u2+' has signed '+u3+'\'s public key. '+u1+' has never met '+u3+' in person.',
+     rubric:[{check:'Trust is transitive through the chain: '+u1+' trusts '+u2+', and '+u2+' trusts '+u3+', so '+u1+' can extend trust to '+u3+'.',keys:['transitive','chain','trust']},{check:'This is the Web of Trust model, which is decentralized.',keys:['web of trust','decentrali']},{check:'This differs from the Certificate Authority model, which relies on centralized trust.',keys:['ca','certificate','central']}],answer:'Through the Web of Trust, trust is transitive. Since '+u1+' trusts '+u2+' and '+u2+' trusts '+u3+', '+u1+' can extend trust to '+u3+' without meeting them directly. This is fundamentally different from the Certificate Authority model used by HTTPS, which relies on centralized authorities rather than decentralized peer trust.'},
+    {s:u1+' encrypted a file using '+u2+'\'s public key. Later, '+u1+'\'s own private key is compromised by an attacker.',
+     rubric:[{check:'The attacker cannot decrypt the file because it was encrypted with '+u2+'\'s public key, and only '+u2+'\'s private key can decrypt it.',keys:['cannot','can\'t','no']},{check:'Only '+u2+'\'s private key can decrypt the file.',keys:[u2.toLowerCase(),'private','decrypt']},{check:'The compromise of '+u1+'\'s private key means the attacker can forge '+u1+'\'s digital signatures, but they cannot decrypt files intended for others.',keys:['forge','sign','signature']}],answer:'The attacker cannot decrypt the file because it was encrypted with '+u2+'\'s public key, which means only '+u2+'\'s private key can decrypt it. The compromise of '+u1+'\'s private key allows the attacker to forge '+u1+'\'s digital signatures and decrypt messages encrypted specifically for '+u1+', but it does not affect files encrypted for other recipients.'},
+  ]);
+  return{tags:['linux'],bloom:3,q:`<div class="sc">${sc.s}</div>Please trace all of the cryptographic key operations involved in this scenario. Explain which keys are used for what purpose, and answer in complete sentences.`,rubric:sc.rubric,answer:sc.answer,mistake:'Remember: encryption uses the recipient\'s public key, and signing uses the sender\'s private key. These are opposite operations.'};
+},
+
+// 7: Parsing the Linux shadow file
+()=>{const a=P([{id:'1',name:'MD5'},{id:'5',name:'SHA-256'},{id:'6',name:'SHA-512'}]);
+  const salt=P(['xK9p','mNrT8wZ','RandomSalt99','ab12cd34']);const entry='$'+a.id+'$'+salt+'$'+'a'.repeat(R(20,35));
+  return{tags:['linux','pwstore'],bloom:3,
+    q:`Consider the following entry from a Linux shadow file: <code>${entry}</code>. Please answer the following in complete sentences: (a) What hashing algorithm is being used, what is the salt value, and where is the hash? (b) Is this configuration secure enough for storing passwords in a production system? Why or why not? (c) What specific change would you recommend to improve the security of password storage on this system?`,
+    rubric:[
+      {check:'The prefix $'+a.id+' indicates that the hashing algorithm is '+a.name+'.',keys:[a.name.toLowerCase(),'$'+a.id]},
+      {check:'The salt value is '+salt+', which is stored in plaintext between the second and third dollar signs.',keys:[salt.toLowerCase(),'salt','plaintext']},
+      {check:a.name+' is too fast for password storage because GPUs can compute billions of hashes per second.',keys:['fast','not','insufficient','weak','bad','too fast']},
+      {check:'The system should migrate to a slow hash function like bcrypt or scrypt that includes built-in key stretching.',keys:['bcrypt','scrypt','slow','stretch','migrate']},
+    ],answer:`<p>The prefix $${a.id} indicates the hashing algorithm is ${a.name}. The salt value is "${salt}", which appears in plaintext between the second and third dollar signs. The remaining characters after the third dollar sign are the actual hash. This configuration is not secure enough for production use because ${a.name} is a general-purpose hash function that is too fast, allowing GPUs to compute billions of hashes per second. The system should migrate to a purpose-built password hashing function like bcrypt or scrypt, which include configurable work factors that intentionally slow down computation.</p>`,mistake:'Even SHA-512 is a poor choice for password hashing because it is designed to be fast. Password hashing requires intentionally slow algorithms like bcrypt, scrypt, or PBKDF2.'};
+},
+
+// 8: Linux pipe commands
+()=>{const t=P([
+    {task:'find all lines containing "Failed" in the auth.log file, count how many times each IP address appears, and display the top 5 most frequent IP addresses',rubric:[{check:'The first step is to use grep to filter lines containing "Failed" from the log file.',keys:['grep','failed']},{check:'Then use awk or cut to extract the IP address field from each matching line.',keys:['awk','cut','print']},{check:'The output must be sorted before passing to uniq, because uniq only removes adjacent duplicate lines.',keys:['sort','uniq','adjacent']},{check:'The uniq -c command counts consecutive identical lines and prepends the count.',keys:['uniq','-c','count']},{check:'Finally, sort -rn sorts numerically in reverse order, and head -5 shows only the top five results.',keys:['sort -rn','head','top']}]},
+    {task:'list all users on the system whose login shell is /bin/bash, show only their usernames, and sort them alphabetically',rubric:[{check:'The data source is the /etc/passwd file, which contains user account information.',keys:['passwd','etc/passwd']},{check:'Use grep to filter for lines containing /bin/bash as the shell.',keys:['grep','bash']},{check:'Use cut with the colon delimiter and field 1 to extract just the username.',keys:['cut','-d:','-f1']},{check:'Use sort to arrange the usernames in alphabetical order.',keys:['sort','alphabetic']}]},
+    {task:'count the total number of unique IP addresses that appear in an access.log file',rubric:[{check:'Use awk or cut to extract the IP address field from each log line.',keys:['awk','cut','$1','field']},{check:'The extracted IP addresses must be sorted before deduplication because uniq only removes adjacent duplicates.',keys:['sort','before','adjacent']},{check:'Use uniq to remove consecutive duplicate entries.',keys:['uniq','unique','duplicate']},{check:'Use wc -l to count the total number of remaining lines, which equals the number of unique IP addresses.',keys:['wc','-l','count']}]},
+  ]);
+  return{tags:['linux'],bloom:3,q:`Please write a Linux pipeline command to accomplish the following task: <b>${t.task}</b>. In your answer, explain what each stage of the pipeline does and why it is necessary. Answer in complete sentences.`,rubric:t.rubric,answer:'There are multiple valid solutions to this problem. The key principle is that each command\'s standard output is connected to the next command\'s standard input through the pipe operator.',mistake:'Remember that sort must always come before uniq in a pipeline because uniq only removes adjacent duplicate lines. Also, the pipe operator connects stdout to stdin, which is different from redirection operators like > and >>.'};
+},
+
+// 9: Needham-Schroeder and Kerberos protocol analysis
+()=>{const f=P([
+    {q:'The Needham-Schroeder protocol has a known replay attack vulnerability in step 3, where an attacker who stole an old session key can replay the message to Bob. Please answer in complete sentences: (a) Why is this replayed message undetectable by Bob in the original protocol? (b) How do timestamps fix this vulnerability? (c) Where specifically does Kerberos incorporate this timestamp-based fix?',
+     rubric:[{check:'The replayed message is undetectable because Bob has no way to distinguish a fresh message from a stale one, since the encryption is still valid with the old key.',keys:['valid','old','stale','fresh']},{check:'Adding timestamps allows Bob to reject messages that are not recent, because he only accepts messages with timestamps within an acceptable time window.',keys:['timestamp','reject','stale','recent']},{check:'Kerberos incorporates timestamps in the authenticator that the user sends to the TGS in step 3 of the protocol.',keys:['authenticator','step 3','tgs']}]},
+    {q:'Distributed authentication systems face three fundamental problems: synchronizing credentials across machines, preventing passwords from being sent in cleartext, and limiting damage from service compromise. Please explain in complete sentences: how does each specific Kerberos mechanism address each of these three problems?',
+     rubric:[{check:'The KDC centralizes credential management, which eliminates the need to synchronize password files across multiple machines.',keys:['kdc','central','single']},{check:'In Kerberos, the user\'s actual password is never transmitted over the network because it is only used locally to decrypt the response from the Authentication Server.',keys:['never sent','not transmit','encrypted']},{check:'Individual services only receive session keys through tickets, so they never learn the user\'s actual password, which limits the damage if a service is compromised.',keys:['session key','ticket','never learn']}]},
+    {q:'Please describe all four steps of the Kerberos authentication flow in complete sentences. For each step, state who sends the message to whom, what the message contains, and what key encrypts each piece.',
+     rubric:[{check:'In step 1, the user sends their identity to the Authentication Server to request access.',keys:['user','as','identity']},{check:'In step 2, the AS responds with a TGT and a session key, where the session key is encrypted with the user\'s key.',keys:['tgt','session key']},{check:'In step 3, the user sends the TGT along with an authenticator containing their identity and a timestamp, encrypted with the session key, to the TGS.',keys:['tgs','authenticator','timestamp']},{check:'In step 4, the TGS responds with a service ticket that allows the user to access the target service.',keys:['service ticket']}]},
+  ]);
+  return{tags:['distauth','kerberos'],bloom:4,q:f.q,rubric:f.rubric,answer:'Each rubric item above describes one key point that a complete answer should address in full sentences. Review the rubric to see which specific concepts and mechanisms you should have explained in your response.',mistake:'Remember: TGS is a server component (Ticket Granting Server), while TGT is a ticket (Ticket Granting Ticket). These are different things.'};
+},
+
+// 10: ACL vs Capabilities access control design
+()=>{const s=P([
+    {desc:'a cloud storage platform where users can share files with other users',keys_d:['upload','overwrite','server','trick']},
+    {desc:'a hospital electronic health records system',keys_d:['report','all records','admin']},
+    {desc:'a CI/CD build server that needs limited access to a production database',keys_d:['build','prod','credential','config']},
+    {desc:'a mobile app that needs access to the camera but not the contacts',keys_d:['qr','contact','exfiltrat','permission']},
+  ]);
+  return{tags:['ac'],bloom:4,
+    q:`You are designing the access control system for <b>${s.desc}</b>. Please answer the following in complete sentences: (a) If you use ACL-based access control, what specific security risk does ambient authority create in this system? (b) If you use capability-based access control instead, what advantage does it provide? (c) Describe a concrete Confused Deputy scenario that could occur in this system under ACL-based access control.`,
+    rubric:[
+      {check:'ACL-based access control grants all permissions associated with the running identity, which means a program inherits the full authority of the user who runs it.',keys:['acl','inherit','all','implicit']},
+      {check:'This creates ambient authority, where programs automatically have access to everything the user can access without explicitly requesting it.',keys:['ambient','automatic','authority']},
+      {check:'Capability-based access control requires programs to hold explicit, unforgeable tokens for each resource they need, which limits access to only what is specifically granted.',keys:['capabilit','token','explicit','only']},
+      {check:'Described a concrete Confused Deputy scenario specific to this system.',keys:s.keys_d},
+    ],answer:`<p>Under ACL-based access control, any program running as a user automatically inherits all of that user's permissions, which creates ambient authority. This means a compromised or malicious program can access any resource the user can. Capability-based access control solves this by requiring explicit, unforgeable tokens for each resource, so a program can only access what it has been specifically granted. A Confused Deputy attack in this system could occur when a trusted program is tricked into using its elevated privileges on behalf of an unauthorized request.</p>`,mistake:'The Confused Deputy Problem exists specifically because ACLs provide ambient authority. Capabilities solve it by requiring explicit delegation.'};
+},
+
+// 11: Dictionary attack analysis on a specific password
+()=>{const p=P([
+    {pw:'January2025!',base:'January',keys_r:['month','year','dictionary','capitalize']},
+    {pw:'L3tM3in!',base:'LetMein',keys_r:['leet','substitut','common','breach']},
+    {pw:'Vikings#1Fan',base:'Vikings',keys_r:['sport','team','dictionary']},
+    {pw:'Admin@2024',base:'Admin',keys_r:['role','admin','first word','year']},
+    {pw:'!qaz2wsx',base:'keyboard walk',keys_r:['keyboard','walk','pattern','qwerty']},
+    {pw:'Tr0ub4dor&3',base:'Troubador',keys_r:['leet','xkcd','troubador','substitut']},
+  ]);
+  return{tags:['pwcrack'],bloom:3,
+    q:`Consider the password <code>${p.pw}</code>. Please analyze this password in complete sentences: (a) Does this password meet typical complexity requirements such as uppercase, lowercase, numbers, and symbols? (b) How would a dictionary attack with rule mangling crack this password? Identify the likely base word and the transformations applied. (c) What would be a stronger alternative password strategy, and why is it more resistant to cracking?`,
+    rubric:[
+      {check:'The likely base word is "'+p.base+'", which would be found in a standard dictionary or common password list.',keys:[p.base.toLowerCase(),'base','dictionary']},
+      {check:'The transformations applied include common rule-mangling techniques.',keys:p.keys_r},
+      {check:'Although this password meets typical complexity requirements, it is still weak because dictionary attacks with rules can crack it quickly.',keys:['complexity','meets','weak','still','false']},
+      {check:'A stronger alternative would be a long random passphrase or a password generated by a password manager, because these have much higher entropy.',keys:['passphrase','random','longer','entropy']},
+    ],answer:`<p>The password "${p.pw}" does meet typical complexity requirements because it contains uppercase letters, lowercase letters, numbers, and symbols. However, it is still weak because the base word "${p.base}" is easily found in dictionaries, and the transformations are common rule-mangling patterns that tools like Hashcat and John the Ripper apply automatically. A stronger alternative would be a long random passphrase of 16 or more characters, or a randomly generated password from a password manager, because these have much higher entropy and are not derived from dictionary words.</p>`,mistake:'Meeting complexity requirements does not make a password secure. In real-world cracking tests, about 60-70% of passwords are cracked within 24 hours using dictionary attacks with rule mangling.'};
+},
+
+// 12: Biometric authentication vulnerabilities
+()=>{const b=P([
+    {name:'fingerprint scanning',keys_a:['gelatin','mold','lift','surface']},
+    {name:'two-dimensional facial recognition',keys_a:['photo','photograph','picture','print']},
+    {name:'static voice phrase recognition',keys_a:['replay','record','play back']},
+    {name:'dynamic voice recognition using a trained model',keys_a:['ai','synthe','deepfake']},
+    {name:'iris scanning',keys_a:['photo','contact lens','print']},
+  ]);
+  return{tags:['bio2fa','auth'],bloom:3,
+    q:`Consider a system that uses <b>${b.name}</b> for authentication. Please answer the following in complete sentences: (a) How could an attacker defeat this specific biometric method? Describe the attack technique. (b) Why is a compromised biometric fundamentally worse than a compromised password? (c) What defense strategy would make this biometric more secure?`,
+    rubric:[
+      {check:'Described a specific attack technique that defeats this biometric.',keys:b.keys_a},
+      {check:'Explained that biometrics are irrevocable and immutable, meaning you cannot change or reset them once compromised.',keys:['irrevocab','immutab','can\'t change','cannot change','forever','permanent']},
+      {check:'Contrasted this with passwords and tokens, which can be revoked, reset, or replaced after a compromise.',keys:['password','revocab','reset','change','replace']},
+    ],answer:`<p>${b.name.charAt(0).toUpperCase()+b.name.slice(1)} can be defeated using ${b.keys_a[0]} techniques. The fundamental problem with biometric compromise is that biometrics are irrevocable and immutable. Unlike a password that can be reset or a hardware token that can be replaced, you cannot change your fingerprints, face, or voice after they have been compromised. This was demonstrated by the 2015 OPM breach, where China stole the fingerprints of all US security clearance holders, causing permanent damage. To improve security, biometrics should always be used as one factor in a multi-factor authentication system, never as the sole authentication method.</p>`,mistake:'The 2015 OPM breach permanently compromised the fingerprints of millions of US government employees. This damage can never be undone because biometrics cannot be changed.'};
+},
+
+// 13: TOTP two-factor authentication
+()=>{const interval=P([30,60]),unix=P([1700000000,1710000000,1720000000,1730000000]),tc=Math.floor(unix/interval);
+  return{tags:['bio2fa'],bloom:3,
+    q:`A TOTP (Time-based One-Time Password) system is configured with a time interval of ${interval} seconds and the current Unix timestamp is ${unix}. Please answer the following in complete sentences: (a) What is the time counter value, and how is it calculated? (b) How is the actual one-time code generated from this counter value? (c) How does the time-based nature of TOTP prevent replay attacks? (d) Why is SMS-based two-factor authentication considered deprecated compared to TOTP?`,
+    rubric:[
+      {check:'The time counter is '+tc+', calculated by dividing the Unix timestamp '+unix+' by the interval '+interval+' and taking the floor.',keys:[''+tc,'floor',''+unix]},
+      {check:'The one-time code is generated by computing HMAC using the shared secret key and the time counter as inputs.',keys:['hmac','shared','secret']},
+      {check:'TOTP prevents replay attacks because each code expires after the time interval, so a captured code becomes useless after it changes.',keys:['expire','replay','useless','change']},
+      {check:'SMS two-factor authentication is deprecated because attackers can perform SIM hijacking by social-engineering the phone carrier into activating a new SIM card.',keys:['sim','hijack','swap','carrier']},
+    ],answer:`<p>The time counter is ${tc}, which is calculated by dividing the Unix timestamp ${unix} by the time interval of ${interval} seconds and taking the floor of the result. The one-time code is generated by computing an HMAC using the shared secret key and the time counter as inputs, then truncating the result to produce a six-digit code. TOTP prevents replay attacks because each code is only valid for ${interval} seconds, after which a new code is generated and the old one becomes useless. SMS-based two-factor authentication is considered deprecated because attackers can perform SIM hijacking, where they social-engineer the phone carrier into activating a new SIM card, which redirects all SMS messages to the attacker's phone.</p>`,mistake:'The shared secret key is exchanged once during setup via a QR code. After that, TOTP works without an internet connection because both the server and the authenticator app independently compute the same code from the shared secret and the current time.'};
+},
+
+// 14: Salting versus key stretching
+()=>{const attack=P(['rainbow table attack','GPU brute-force attack','precomputed hash table attack']),defense=P(['per-user salting','bcrypt (key stretching)','scrypt (memory-hard key stretching)','SHA-512 (no key stretching)']);
+  const isPrecomp=attack.includes('rainbow')||attack.includes('precomp');
+  const effective=isPrecomp?defense.includes('per-user'):defense.includes('bcrypt')||defense.includes('scrypt');
+  return{tags:['pwstore','pwcrack'],bloom:3,
+    q:`Does <b>${defense}</b> effectively defend against a <b>${attack}</b>? Please answer in complete sentences: (a) State whether this defense is effective against this specific attack, and explain why or why not. (b) Explain the mechanism by which this defense works (or fails to work). (c) What type of attack is this defense NOT effective against, and what additional protection would be needed?`,
+    rubric:[
+      {check:(effective?'Yes, this defense is effective against this attack.':'No, this defense is not effective against this attack.'),keys:effective?['yes','defend','protect']:['no','does not','doesn\'t','not protect']},
+      {check:'Explained the mechanism of how salting and stretching work differently.',keys:isPrecomp?['precomput','rainbow','unique','per-user']:['slow','fast','gpu','time','expensive']},
+      {check:'Distinguished between what salting protects against (precomputation) and what stretching protects against (brute force).',keys:['salt','stretch','precomput','brute','different']},
+    ],answer:`<p>${effective?'Yes':'No'}, ${defense} ${effective?'does':'does not'} effectively defend against a ${attack}. Salting protects against precomputation attacks like rainbow tables by ensuring each user's hash is unique, but it does not slow down brute-force attacks. Key stretching protects against brute-force attacks by making each hash computation intentionally slow, but it does not prevent precomputation unless combined with salting. A complete defense requires both per-user salting and key stretching together.</p>`,mistake:'This is the most commonly confused distinction on the exam. Salting defeats precomputation attacks. Key stretching defeats brute-force attacks. They protect against different threats and both are needed.'};
+},
+];
+
+// ═══════════════════════════════════════════════════════════════
+// UI ENGINE
+// ═══════════════════════════════════════════════════════════════
+let mode='practice',studied=0,topics=Object.keys(T);
+const PRACTICE_TOPICS=Object.keys(T);
+let qz={qs:[],i:0,answers:[],tsec:120,timer:null,tl:0,rev:false,sim:false,startTimes:[]};
+const app=document.getElementById('app');
+
+function render(){
+  cleanupNotes();
+  document.getElementById('md2').innerHTML=[['practice','Practice'],['exam','Exam Sim'],['notes','Notes'],['grade','Grade'],['credits','Credits']].map(([k,v])=>`<button class="mb ${mode===k?'on':''}" onclick="mode='${k}';render()">${v}</button>`).join('');
+  document.getElementById('std').textContent=session.answers.length;
+  // Hide stats counter in notes/credits mode
+  document.querySelector('.sts').style.display=(mode==='notes'||mode==='credits')?'none':'';
+  document.querySelector('.sep').style.display=(mode==='notes')?'none':'';
+  if(mode==='practice') qz.i===0?startScreen():showQ();
+  else if(mode==='exam') qz.i===0?examStart():showQ();
+  else if(mode==='notes') showNotes();
+  else if(mode==='credits') showCredits();
+  else showGrade();
+}
+
+function startScreen(){
+  qz={qs:[],i:0,answers:[],tsec:120,timer:null,tl:0,rev:false,sim:false,startTimes:[]};
+  const chips=PRACTICE_TOPICS.map(k=>`<span class="ci2 ${topics.includes(k)?'on':''}" onclick="toggleT('${k}')">${T[k].n}</span>`).join('');
+  app.innerHTML=`<div class="cd"><div class="st">
+    <h2>Practice Mode</h2>
+    <p>Each question is graded after you submit your answer. The rubric and model answer are revealed immediately so you can learn from each question.<br>When you feel ready, switch to <b>Exam Sim</b> to test yourself under timed conditions.</p>
+    <div class="ch">${chips}</div>
+    <div class="cf"><label>Questions:</label><select id="qn"><option>5</option><option selected>10</option><option>15</option></select>
+    <label>Timer:</label><select id="qt"><option>Off</option><option>90s</option><option selected>120s</option><option>180s</option></select></div>
+    <button class="bn bp" style="margin-top:14px;padding:12px 32px" onclick="startQuiz(false)">Begin Practice</button>
+  </div></div>`;
+}
+
+function examStart(){
+  qz={qs:[],i:0,answers:[],tsec:150,timer:null,tl:0,rev:false,sim:true,startTimes:[]};
+  app.innerHTML=`<div class="cd"><div class="st">
+    <h2>Exam Simulation</h2>
+    <p>This simulation includes 15 questions covering all topics with 2.5 minutes per question. <b>You will not receive any feedback until the end.</b><br>This is designed to mirror real exam conditions. Your predicted grade will update after you finish.</p>
+    <button class="bn bp" style="margin-top:14px;padding:12px 32px" onclick="startQuiz(true)">Start Exam</button>
+  </div></div>`;
+}
+
+window.toggleT=k=>{topics.includes(k)?topics=topics.filter(x=>x!==k):topics.push(k);render()};
+
+window.startQuiz=(sim)=>{
+  qz.sim=sim;
+  if(sim){
+    qz.tsec=150;qz.qs=[];
+    const all=S([...Array(GEN.length).keys()]);
+    all.forEach(i=>{try{qz.qs.push(GEN[i]())}catch(e){}});
+  } else {
+    const n=parseInt(document.getElementById('qn')?.value||'10');
+    const ts=document.getElementById('qt')?.value||'120s';
+    qz.tsec=ts==='Off'?0:parseInt(ts);qz.qs=[];
+    const pool=GEN.filter(fn=>{try{const q=fn();return q&&q.tags.some(t=>topics.includes(t))}catch(e){return false}});
+    for(let i=0;i<n;i++)qz.qs.push(P(pool)());
+  }
+  qz.i=0;qz.answers=[];qz.startTimes=[];showQ();
+};
+
+function showQ(){
+  if(qz.i>=qz.qs.length){qz.sim?showExamResults():showResults();return}
+  const g=qz.qs[qz.i];qz.rev=false;qz.tl=qz.tsec;clearInterval(qz.timer);
+  qz.startTimes[qz.i]=Date.now();
+  const pct=(qz.i/qz.qs.length*100).toFixed(0);
+  const bLabel=['','','Explain','Apply','Analyze'][g.bloom]||'';
+  app.innerHTML=`<div class="pb"><div class="pf" style="width:${pct}%"></div></div><div class="cd">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+      <span style="font:700 13px/1 var(--mo);color:var(--k4)">Question ${qz.i+1} of ${qz.qs.length}${qz.sim?' — EXAM':''}</span>
+      <span class="bl b${g.bloom}">${bLabel}</span>
+      ${qz.tsec?`<span class="tmr" id="tmr">⏱ ${qz.tsec}s</span>`:'<span></span>'}
+    </div>
+    <div class="qx">${g.q}</div>
+    <textarea class="ax" id="ua" placeholder="Write your answer in complete sentences. Use reasoning words like 'because', 'therefore', and 'which means' to explain your logic." rows="6"></textarea>
+    <div class="bx">
+      <button class="bn bp" id="gradeBtn" onclick="doGrade()">${qz.sim?'Submit and Continue':'Grade My Answer'}</button>
+      ${qz.sim?'':`<button class="bn bs" onclick="skipQ()">Skip This Question →</button>`}
+    </div>
+    <div id="rubricArea"></div>
+  </div>`;
+  setTimeout(()=>document.getElementById('ua')?.focus(),80);
+  if(qz.tsec)qz.timer=setInterval(()=>{qz.tl--;const el=document.getElementById('tmr');if(el){el.textContent=`⏱ ${qz.tl}s`;if(qz.tl<=15)el.classList.add('w')}if(qz.tl<=0){clearInterval(qz.timer);doGrade(true)}},1000);
+}
+
+window.doGrade=(timedOut=false)=>{
+  if(qz.rev)return;qz.rev=true;clearInterval(qz.timer);
+  const g=qz.qs[qz.i];
+  const ua=document.getElementById('ua')?.value||'';
+  const timeUsed=(Date.now()-qz.startTimes[qz.i])/1000;
+  document.getElementById('ua')?.setAttribute('readonly','');
+  document.getElementById('gradeBtn').style.display='none';
+  const result=gradeAnswer(ua,g.rubric);
+  const entry={tags:g.tags,contentScore:result.contentScore,reasonScore:result.reasonScore,timedOut:!!timedOut,timeUsed,timeBudget:qz.tsec};
+  qz.answers.push({...entry,result,question:g});
+  if(!result.empty) session.add(g.tags,result.contentScore,result.reasonScore,!!timedOut,timeUsed,qz.tsec);
+  if(qz.sim){studied++;qz.i++;showQ();return;}
+  window._rubOverrides=result.items.map(r=>r.pass);
+  const col=result.contentScore>=.7?'var(--fr)':result.contentScore>=.4?'var(--oc)':'var(--tr)';
+  const reasonLabel=result.reasonScore>=.7?'Strong':result.reasonScore>=.4?'Moderate':'Weak';
+  const reasonCol=result.reasonScore>=.7?'var(--fr)':result.reasonScore>=.4?'var(--oc)':'var(--tr)';
+  document.getElementById('rubricArea').innerHTML=`
+    <div class="rb show" style="background:var(--nvb);border:1px solid rgba(43,77,122,.15)">
+      <div class="rb-title" style="color:var(--nv)">Graded — click any item to override the automated judgment</div>
+      <div class="rub">${result.items.map((r,i)=>`<div class="ri ${r.pass?'yes':'no'}" id="ri${i}" onclick="overrideRub(${i})">
+        <div class="ri-box" id="rb${i}">${r.pass?'✓':'✗'}</div>
+        <div class="ri-text"><b>${r.check}</b>${r.detail||''}
+          <div class="ri-kw">${r.keys.map(k=>`<span class="kw ${r.hits.includes(k)?'hit':'miss'}">${k}</span>`).join('')}</div>
+        </div>
+      </div>`).join('')}</div>
+      <div style="display:flex;gap:12px;align-items:center;margin-top:12px;flex-wrap:wrap">
+        <div class="score-bar" style="flex:1;min-width:150px"><div class="fill"><div id="scoreFill" style="width:${Math.round(result.contentScore*100)}%;background:${col}"></div></div><span class="pct" id="scorePct" style="color:${col}">${Math.round(result.contentScore*100)}%</span></div>
+        <div style="font:600 11px/1 var(--sa)">Reasoning: <span class="reason-tag" style="background:${reasonCol}20;color:${reasonCol}">${reasonLabel} (${result.reasonCount} connectors)</span></div>
+      </div>
+    </div>
+    <details class="model" style="margin-top:12px"><summary>Model Answer</summary><div class="inner">${g.answer}</div></details>
+    ${g.mistake?`<div class="mk"><b>⚠ Common Mistake</b>${g.mistake}</div>`:''}
+    <div class="bx" style="margin-top:14px"><button class="bn bp" onclick="nextQ()">Next Question →</button></div>`;
+};
+
+window.overrideRub=(i)=>{const ov=window._rubOverrides;ov[i]=!ov[i];
+  document.getElementById('ri'+i).className='ri '+(ov[i]?'yes':'no');
+  document.getElementById('rb'+i).textContent=ov[i]?'✓':'✗';
+  const pct=ov.filter(x=>x).length/ov.length;const col=pct>=.7?'var(--fr)':pct>=.4?'var(--oc)':'var(--tr)';
+  document.getElementById('scoreFill').style.width=Math.round(pct*100)+'%';document.getElementById('scoreFill').style.background=col;
+  document.getElementById('scorePct').textContent=Math.round(pct*100)+'%';document.getElementById('scorePct').style.color=col;
+  const ans=qz.answers[qz.i];if(ans){const newCS=ov.filter(x=>x).length/ov.length;const last=session.answers[session.answers.length-1];if(last)last.contentScore=newCS;}
+};
+
+window.nextQ=()=>{studied++;qz.i++;render()};
+window.skipQ=()=>{clearInterval(qz.timer);qz.answers.push({tags:qz.qs[qz.i].tags,contentScore:0,reasonScore:0,timedOut:false,timeUsed:0,timeBudget:qz.tsec,result:{items:[],contentScore:0,reasonScore:0}});qz.i++;showQ()};
+
+function renderGradeRing(pct, letter, col) {
+  const r=54,c=2*Math.PI*r,dash=c*pct/100;
+  return `<div class="grade-ring"><svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--c2)" stroke-width="10"/><circle cx="60" cy="60" r="${r}" fill="none" stroke="${col}" stroke-width="10" stroke-dasharray="${dash} ${c}" stroke-linecap="round"/></svg><div class="letter" style="color:${col}">${letter}</div></div>`;
+}
+
+function showResults(){
+  clearInterval(qz.timer);
+  const g=session.getGrade();
+  const col=g.pct>=78?'var(--fr)':g.pct>=55?'var(--oc)':'var(--tr)';
+  const tagScores={};
+  qz.answers.filter(a=>a.contentScore!==undefined).forEach(a=>(a.tags||[]).forEach(t=>{if(T[t]){if(!tagScores[t])tagScores[t]={s:0,n:0};tagScores[t].s+=a.contentScore;tagScores[t].n++}}));
+  const weak=Object.entries(tagScores).filter(([,s])=>s.n>0&&s.s/s.n<.6).sort((a,b)=>a[1].s/a[1].n-b[1].s/b[1].n);
+  app.innerHTML=`<div class="cd"><div class="rs"><h2>Session Complete</h2>
+    ${g.n>=3?renderGradeRing(g.pct,g.letter,col):`<p style="color:var(--k3);margin:16px 0">You need to answer at least ${3-g.n} more questions before a grade can be predicted.</p>`}
+    ${g.n>=3?`<p style="font:600 12px/1 var(--sa);color:var(--k4)">Predicted exam score · ${g.confidence} confidence (based on ${g.n} questions)</p>`:''}\
+    ${g.n>=3?`<div class="gd">
+      <div class="gd-item"><div class="gd-label">Content Accuracy</div><div class="gd-val" style="color:${g.accuracy>=70?'var(--fr)':g.accuracy>=40?'var(--oc)':'var(--tr)'}">${g.accuracy}%</div><div class="gd-bar"><div style="width:${g.accuracy}%;background:${g.accuracy>=70?'var(--fr)':g.accuracy>=40?'var(--oc)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Reasoning Quality</div><div class="gd-val" style="color:${g.reasoning>=70?'var(--fr)':g.reasoning>=40?'var(--oc)':'var(--tr)'}">${g.reasoning}%</div><div class="gd-bar"><div style="width:${g.reasoning}%;background:${g.reasoning>=70?'var(--fr)':g.reasoning>=40?'var(--oc)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Topic Coverage</div><div class="gd-val" style="color:${g.coverage>=70?'var(--fr)':g.coverage>=40?'var(--oc)':'var(--tr)'}">${g.coverage}%</div><div class="gd-bar"><div style="width:${g.coverage}%;background:${g.coverage>=70?'var(--fr)':g.coverage>=40?'var(--oc)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Speed Under Pressure</div><div class="gd-val" style="color:${g.speed>=70?'var(--fr)':g.speed>=40?'var(--oc)':'var(--tr)'}">${g.speed}%</div><div class="gd-bar"><div style="width:${g.speed}%;background:${g.speed>=70?'var(--fr)':g.speed>=40?'var(--oc)':'var(--tr)'}"></div></div></div>
+    </div>`:''}\
+    ${g.topicGaps?.length?`<div class="wk"><h3>⚠ Untested Topics</h3>${g.topicGaps.map(t=>`<div class="wi">${T[t]?.n||t} — not yet practiced</div>`).join('')}</div>`:''}\
+    ${weak.length?`<div class="wk"><h3>⚠ Weak Areas</h3>${weak.map(([t,s])=>`<div class="wi">${T[t]?.n||t} — ${Math.round(s.s/s.n*100)}%</div>`).join('')}</div>`:''}\
+    <div class="cm"><h3>Performance By Topic</h3>${Object.entries(tagScores).sort((a,b)=>a[1].s/a[1].n-b[1].s/b[1].n).map(([t,s])=>{
+      const pct=Math.round(s.s/s.n*100);const c=pct>=70?'var(--fr)':pct>=40?'var(--oc)':'var(--tr)';
+      return`<div class="cr2"><span class="nm">${T[t]?.n||t}</span><div class="br2" style="width:${Math.max(pct,4)}%;background:${c}"></div><span class="pc" style="color:${c}">${pct}%</span></div>`}).join('')}</div>
+    <div class="bx" style="justify-content:center;margin-top:20px">
+      <button class="bn bp" onclick="mode='practice';qz.i=0;render()">Practice More</button>
+      <button class="bn bs" onclick="mode='exam';qz.i=0;render()">Exam Sim</button>
+      <button class="bn bs" onclick="mode='grade';render()">Full Grade</button>
+    </div>
+  </div></div>`;
+}
+
+function showExamResults(){
+  clearInterval(qz.timer);
+  const g=session.getGrade();
+  const col=g.pct>=78?'var(--fr)':g.pct>=55?'var(--oc)':'var(--tr)';
+  let reviewHTML='';
+  qz.answers.forEach((a,i)=>{
+    const r=a.result;if(!r)return;
+    const qText=a.question?.q?.replace(/<[^>]*>/g,' ').substring(0,120)||'Question '+(i+1);
+    const sc=Math.round(r.contentScore*100);const c=sc>=70?'var(--fr)':sc>=40?'var(--oc)':'var(--tr)';
+    reviewHTML+=`<div style="margin-bottom:12px;padding:10px;border-radius:6px;background:var(--c0);border-left:3px solid ${c}">
+      <div style="font:600 12px/1.3 var(--sa);color:var(--k2);margin-bottom:4px">${i+1}. ${qText}…</div>
+      <div style="font:700 12px/1 var(--mo);color:${c}">${sc}% content accuracy · ${r.reasonCount} reasoning connectors</div>
+      <div style="margin-top:4px;font-size:11px;color:var(--k3)">${r.items.map(it=>`<span style="color:${it.pass?'var(--fr)':'var(--tr)'}">●</span> ${it.check}`).join(' · ')}</div>
+    </div>`;
+  });
+  app.innerHTML=`<div class="cd"><div class="rs"><h2>Exam Complete</h2>
+    ${renderGradeRing(g.pct,g.letter,col)}
+    <p style="font:600 12px/1 var(--sa);color:var(--k4)">Predicted grade: ${g.letter} · ${g.confidence} confidence (based on ${g.n} total questions)</p>
+    <div class="gd">
+      <div class="gd-item"><div class="gd-label">Accuracy</div><div class="gd-val">${g.accuracy}%</div><div class="gd-bar"><div style="width:${g.accuracy}%;background:${g.accuracy>=70?'var(--fr)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Reasoning</div><div class="gd-val">${g.reasoning}%</div><div class="gd-bar"><div style="width:${g.reasoning}%;background:${g.reasoning>=70?'var(--fr)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Coverage</div><div class="gd-val">${g.coverage}%</div><div class="gd-bar"><div style="width:${g.coverage}%;background:${g.coverage>=70?'var(--fr)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Speed</div><div class="gd-val">${g.speed}%</div><div class="gd-bar"><div style="width:${g.speed}%;background:${g.speed>=70?'var(--fr)':'var(--tr)'}"></div></div></div>
+    </div>
+  </div></div>
+  <div class="cd"><h3 style="font:700 14px/1 var(--se);margin-bottom:12px">Question Review</h3>${reviewHTML}
+    <div class="bx" style="justify-content:center;margin-top:16px">
+      <button class="bn bp" onclick="mode='practice';qz.i=0;render()">Practice Weak Areas</button>
+      <button class="bn bs" onclick="mode='exam';qz.i=0;render()">Retake Exam</button>
+    </div>
+  </div>`;
+}
+
+function showGrade(){
+  const g=session.getGrade();
+  if(g.n<3){app.innerHTML=`<div class="cd"><div class="st"><h2>Predicted Grade</h2><p>You need to answer at least 3 questions before a grade can be predicted. You have answered ${g.n} so far.</p><div class="bx" style="justify-content:center"><button class="bn bp" onclick="mode='practice';qz.i=0;render()">Start Practice</button></div></div></div>`;return}
+  const col=g.pct>=78?'var(--fr)':g.pct>=55?'var(--oc)':'var(--tr)';
+  app.innerHTML=`<div class="cd"><div class="rs"><h2>Predicted Exam Grade</h2>
+    ${renderGradeRing(g.pct,g.letter,col)}
+    <p style="font:600 13px/1.4 var(--sa);color:var(--k3);max-width:400px;margin:8px auto">
+      Based on ${g.n} questions · ${g.confidence} confidence<br>
+      ${g.confidence==='low'?'⚠ Complete more questions (at least 15) for a reliable prediction.':g.confidence==='medium'?'Moderate confidence. Running an exam simulation would sharpen this prediction.':'Good sample size. This grade is a reasonable predictor of your exam performance.'}
+    </p>
+    <div class="gd">
+      <div class="gd-item"><div class="gd-label">Content Accuracy (40%)</div><div class="gd-val" style="color:${g.accuracy>=70?'var(--fr)':g.accuracy>=40?'var(--oc)':'var(--tr)'}">${g.accuracy}%</div><div class="gd-bar"><div style="width:${g.accuracy}%;background:${g.accuracy>=70?'var(--fr)':g.accuracy>=40?'var(--oc)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Reasoning Quality (25%)</div><div class="gd-val" style="color:${g.reasoning>=70?'var(--fr)':g.reasoning>=40?'var(--oc)':'var(--tr)'}">${g.reasoning}%</div><div class="gd-bar"><div style="width:${g.reasoning}%;background:${g.reasoning>=70?'var(--fr)':g.reasoning>=40?'var(--oc)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Topic Coverage (20%)</div><div class="gd-val" style="color:${g.coverage>=70?'var(--fr)':g.coverage>=40?'var(--oc)':'var(--tr)'}">${g.coverage}%</div><div class="gd-bar"><div style="width:${g.coverage}%;background:${g.coverage>=70?'var(--fr)':g.coverage>=40?'var(--oc)':'var(--tr)'}"></div></div></div>
+      <div class="gd-item"><div class="gd-label">Speed Under Pressure (15%)</div><div class="gd-val" style="color:${g.speed>=70?'var(--fr)':g.speed>=40?'var(--oc)':'var(--tr)'}">${g.speed}%</div><div class="gd-bar"><div style="width:${g.speed}%;background:${g.speed>=70?'var(--fr)':g.speed>=40?'var(--oc)':'var(--tr)'}"></div></div></div>
+    </div>
+    ${g.topicGaps?.length?`<div class="wk" style="margin-top:16px"><h3>⚠ Untested Topics — These Are Blind Spots</h3>${g.topicGaps.map(t=>`<div class="wi">${T[t]?.n||t}</div>`).join('')}<p style="font-size:11px;color:var(--k3);margin-top:6px">Untested topics lower your coverage score. These topics will appear on the exam.</p></div>`:''}
+    <div style="margin-top:16px;padding:14px;background:var(--c0);border-radius:8px;border:1px solid var(--c2)">
+      <h3 style="font:700 12px/1 var(--sa);margin-bottom:8px;color:var(--k3)">WHAT THIS GRADE MEASURES</h3>
+      <p style="font-size:12px;color:var(--k2);line-height:1.6"><b>Accuracy</b> checks whether your answer contains the correct terms for each randomly generated scenario. <b>Reasoning</b> counts causal connectors like "because," "therefore," and "which means" that signal explanation rather than just listing facts. <b>Coverage</b> tracks which topics you have practiced. <b>Speed</b> measures whether you can answer within the time limit.</p>
+      <p style="font-size:12px;color:var(--tr);margin-top:8px;line-height:1.6"><b>Honest limitation:</b> This tool cannot evaluate whether your causal reasoning is logically correct — it can only detect that reasoning connectors are present. For example, writing "salt prevents brute force because it is slow" would score well on reasoning despite being factually wrong. For logic checking, try explaining concepts to Claude in a separate chat.</p>
+    </div>
+    <div class="bx" style="justify-content:center;margin-top:16px">
+      <button class="bn bp" onclick="mode='practice';qz.i=0;render()">Practice</button>
+      <button class="bn bs" onclick="mode='exam';qz.i=0;render()">Exam Sim</button>
+    </div>
+  </div></div>`;
+}
+
+function showNotes(){
+  // Extend top bar to full width
+  document.querySelector('.top').classList.add('notes-active');
+  
+  // Add search controls to the top bar
+  const topBar = document.querySelector('.top');
+  let searchArea = document.getElementById('notesSearchArea');
+  if (!searchArea) {
+    searchArea = document.createElement('div');
+    searchArea.id = 'notesSearchArea';
+    searchArea.style.cssText = 'display:flex;align-items:center;gap:10px;margin-left:auto;flex:1;justify-content:flex-end;max-width:600px';
+    searchArea.innerHTML = `
+      <div class="notes-search-wrap">
+        <span class="ns-icon">⌕</span>
+        <input type="text" id="notesSearchInput" placeholder="Search notes…" autocomplete="off">
+      </div>
+      <span class="notes-search-count" id="notesSearchCount"></span>
+      <div class="notes-nav-btns">
+        <button onclick="notesExpandAll()">Expand</button>
+        <button onclick="notesCollapseAll()">Collapse</button>
+      </div>
+    `;
+    topBar.appendChild(searchArea);
+  }
+  searchArea.style.display = 'flex';
+  
+  // Inject notes content
+  app.innerHTML = `<div class="notes-wrap" id="notesWrap"><div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar" id="sidebar">
+  <div class="nav-group">
+    <div class="nav-group-title">Authentication</div>
+    <a class="nav-item" href="#auth"><span class="nav-dot" style="background:var(--blue)"></span>Auth Basics</a>
+    <a class="nav-item" href="#pw-storage"><span class="nav-dot" style="background:var(--blue)"></span>Password Storage</a>
+    <a class="nav-item" href="#pw-cracking"><span class="nav-dot" style="background:var(--red)"></span>Password Cracking</a>
+    <a class="nav-item" href="#biometrics"><span class="nav-dot" style="background:var(--purple)"></span>Biometrics & 2FA</a>
+    <a class="nav-item" href="#dist-auth"><span class="nav-dot" style="background:var(--green)"></span>Distributed Auth</a>
+    <a class="nav-item" href="#kerberos"><span class="nav-dot" style="background:var(--accent)"></span>Kerberos</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title">Access Control</div>
+    <a class="nav-item" href="#access"><span class="nav-dot" style="background:var(--amber)"></span>DAC & Unix Perms</a>
+    <a class="nav-item" href="#mac"><span class="nav-dot" style="background:var(--red)"></span>MAC / BLP / Biba</a>
+    <a class="nav-item" href="#covert"><span class="nav-dot" style="background:var(--purple)"></span>Covert & Side Ch.</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title">Human Factors</div>
+    <a class="nav-item" href="#social-eng"><span class="nav-dot" style="background:var(--accent)"></span>Social Engineering</a>
+    <a class="nav-item" href="#phishing"><span class="nav-dot" style="background:var(--red)"></span>Phishing</a>
+    <a class="nav-item" href="#osint"><span class="nav-dot" style="background:var(--green)"></span>OSINT</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title">Frameworks</div>
+    <a class="nav-item" href="#threat"><span class="nav-dot" style="background:var(--amber)"></span>Threat Modeling</a>
+    <a class="nav-item" href="#vsd"><span class="nav-dot" style="background:var(--purple)"></span>Ethics & VSD</a>
+    <a class="nav-item" href="#linux"><span class="nav-dot" style="background:var(--green)"></span>Linux & GPG</a>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-title">Reference</div>
+    <a class="nav-item" href="#glossary"><span class="nav-dot" style="background:var(--ink-faint)"></span>Glossary Index</a>
+    <a class="nav-item" href="#practice"><span class="nav-dot" style="background:var(--accent)"></span>Practice Questions</a>
+  </div>
+</nav>
+
+<!-- ── CONTENT ── -->
+<main class="content" id="content">
+
+<div class="hero">
+  <h1>Foundations of Cybersecurity</h1>
+  <p class="sub">Complete study guide — CY 2550, Spring 2025 Created by Raul Pineda</p>
+  <div class="chips" id="filterChips">
+    <span class="chip active" data-filter="all">All Topics</span>
+    <span class="chip" data-filter="auth">Authentication</span>
+    <span class="chip" data-filter="access">Access Control</span>
+    <span class="chip" data-filter="human">Human Factors</span>
+    <span class="chip" data-filter="framework">Frameworks</span>
+  </div>
+</div>
+
+<!-- ══════════ AUTHENTICATION ══════════ -->
+<section id="auth" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--blue-light)">🔐</span>Authentication</h2>
+<p data-searchable>Authentication is the process of <strong>verifying an actor's identity</strong>. All permissions, capabilities, and access control depend on it. Parameterized as a username and a secret.</p>
+
+<h3>Three Classes of Secrets</h3>
+<div class="card-row" data-searchable>
+  <div class="card"><h4 style="color:var(--blue)">Something You Know</h4><p>Passwords, PINs, security questions</p></div>
+  <div class="card"><h4 style="color:var(--purple)">Something You Have</h4><p>Smart card, smartphone, hardware token</p></div>
+  <div class="card"><h4 style="color:var(--green)">Something You Are</h4><p>Fingerprint, face, voice, iris scan</p></div>
+</div>
+<p data-searchable>Desirable properties of secrets: <strong>unforgeable</strong>, <strong>unguessable</strong>, and <strong>revocable</strong>.</p>
+</section>
+
+<!-- ══════════ PASSWORD STORAGE ══════════ -->
+<section id="pw-storage" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--green-light)">🗄️</span>Password Storage</h2>
+
+<div class="callout callout-attack" data-searchable><b>⚠ Never store passwords in plain text.</b>If an attacker steals the file (Linux: /etc/shadow, Windows: SAM), they can log in as any user including root.</div>
+
+<h3>Hashing</h3>
+<p data-searchable>Store <code>hash(password)</code>. Cryptographic hashes are deterministic, high-entropy, and collision-resistant. Examples: MD5, SHA1, SHA256, SHA512, bcrypt, scrypt, PBKDF2.</p>
+
+<h3>Salting</h3>
+<p data-searchable>Add a unique random <strong>salt</strong> per user: <code>hash(salt + password)</code>. Salts stored in plain text. Defeats pre-computed tables — attacker must brute-force each password individually.</p>
+
+<h3>Key Stretching & Work Factor</h3>
+<p data-searchable>Standard hashes are too fast — GPUs can crack them. Use intentionally slow hash functions:</p>
+<table data-searchable>
+  <thead><tr><th>Algorithm</th><th>Key Feature</th></tr></thead>
+  <tbody>
+  <tr><td><code>bcrypt</code></td><td>Configurable work factor (rounds). Widely used standard.</td></tr>
+  <tr><td><code>PBKDF2</code></td><td>Key derivation function with configurable iterations.</td></tr>
+  <tr><td><code>scrypt</code></td><td>Requires large <strong>memory</strong> + CPU → GPU attacks much harder.</td></tr>
+  </tbody>
+</table>
+
+<h3>Honeywords</h3>
+<p data-searchable>Store multiple salted/hashed passwords per user. Only one is real — the rest are <strong>honeywords</strong>. A separate <strong>honeyserver</strong> (physically separate) stores the index of the real one. If an attacker cracks and uses a honeyword → alert raised.</p>
+
+<h3>Password Recovery & Reset</h3>
+<p data-searchable><strong>KBA</strong> (knowledge-based) — easily defeated via OSINT. <strong>Account-based</strong> (email/SMS code) — depends on secondary account security. Best practice: layered mechanism. SIM hijacking and email takeover are real risks.</p>
+</section>
+
+<!-- ══════════ PASSWORD CRACKING ══════════ -->
+<section id="pw-cracking" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--red-light)">💥</span>Password Cracking</h2>
+
+<table data-searchable>
+  <thead><tr><th>Method</th><th>Description</th></tr></thead>
+  <tbody>
+  <tr><td><strong>Brute Force</strong></td><td>Try all possible passwords. A GPU can hash all 6-char passwords in 16 minutes.</td></tr>
+  <tr><td><strong>Dictionary Attack</strong></td><td>Use common/breached password lists. 60-70% cracked in &lt;24hrs.</td></tr>
+  <tr><td><strong>Rule Mangling</strong></td><td>Apply transforms: password → p4ssw0rd → Password1. Tools: John the Ripper, hashcat.</td></tr>
+  <tr><td><strong>Hash Chains</strong></td><td>Pre-compute chains password→hash→reduce→hash. Store only start/end. Prone to collisions.</td></tr>
+  <tr><td><strong>Rainbow Tables</strong></td><td>Improved hash chains using family of reduction functions {R₁…Rₖ} to reduce collisions.</td></tr>
+  </tbody>
+</table>
+
+<div class="vs-box" data-searchable>
+  <div class="vs-side"><h4 style="color:var(--blue)">Hash Chains</h4><p>Single reduction function R. Collisions merge chains → wasted space, false positives. Larger k = fewer chains but more rebuild cost.</p></div>
+  <div class="vs-side"><h4 style="color:var(--purple)">Rainbow Tables</h4><p>Family of reductions {R₁, R₂, …}. Collisions only possible at same position. Defeated by <strong>salting</strong> and key stretching.</p></div>
+</div>
+
+<h3>Password Strength</h3>
+<p data-searchable>Entropy: <strong>S = log₂(Nᴸ)</strong>. N = symbol space, L = length. Length matters more than variety. Use 16+ char passphrases. Use a mnemonic: "I double dare you, say what one more time" → <code>i2Dy,s"w"omt</code>. Use a password manager. Don't reuse passwords.</p>
+</section>
+
+<!-- ══════════ BIOMETRICS & 2FA ══════════ -->
+<section id="biometrics" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--purple-light)">👆</span>Biometrics & Two-Factor Auth</h2>
+
+<table data-searchable>
+  <thead><tr><th>Biometric</th><th>Vulnerabilities</th></tr></thead>
+  <tbody>
+  <tr><td>Fingerprints</td><td>Lifted from surfaces with tape/glue + gelatin replica. Compellable by law enforcement.</td></tr>
+  <tr><td>Face (2D)</td><td>Broken trivially with a photo.</td></tr>
+  <tr><td>Face (3D depth)</td><td>More secure but vulnerable to lifelike masks.</td></tr>
+  <tr><td>Voice</td><td>Static phrase → replay attack. Trained model → synthetic voice AI with enough samples.</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-attack" data-searchable><b>⚠ Biometrics are immutable.</b>You ARE the password — you can't change it. No reset possible once compromised. Example: OPM breach (2015) — China stole fingerprints of all US security clearance holders.</div>
+
+<h3>Token-Based 2FA</h3>
+<table data-searchable>
+  <thead><tr><th>Method</th><th>How</th><th>Issues</th></tr></thead>
+  <tbody>
+  <tr><td><span class="tag tag-r">SMS Codes</span></td><td>Code via text message</td><td><strong>Deprecated!</strong> SIM hijacking — attacker calls carrier, gets new SIM.</td></tr>
+  <tr><td><span class="tag tag-b">TOTP</span></td><td>Shared secret → HMAC-based codes that change every 30s</td><td>Requires initial secret sharing (QR code).</td></tr>
+  <tr><td><span class="tag tag-g">Hardware (U2F)</span></td><td>Crypto keys in tamper-resistant device</td><td>Always buy 2 keys — keep backup in a safe!</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════ DISTRIBUTED AUTH ══════════ -->
+<section id="dist-auth" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--green-light)">🌐</span>Distributed Authentication</h2>
+
+<p data-searchable>In distributed environments, syncing password files doesn't scale. Need centralized auth. But sending passwords in the clear → attacker can observe. Services learning passwords → additional compromise point.</p>
+
+<h3>NIS (Yellow Pages)</h3>
+<p data-searchable>Sun's Network Information Service. Central directory for users, hostnames, etc. <strong>Fatal flaw:</strong> <code>ypcat passwd</code> exposed password hashes to anyone. Used weak crypt-based hashing. Easily cracked.</p>
+
+<h3>Needham-Schroeder Protocol</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span>Alice → Auth Server: "I want to talk to Bob"</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span>AS → Alice: {K_AB, {K_AB, Alice}encrypted_with_Bob's_key} encrypted_with_Alice's_key</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span>Alice → Bob: {K_AB, Alice} encrypted with Bob's key</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span>Bob → Alice: {N_B} encrypted with K_AB (challenge nonce)</span></div>
+  <div class="flow-step"><span class="flow-num">5</span><span>Alice → Bob: {N_B − 1} encrypted with K_AB (proves she has K_AB)</span></div>
+</div>
+
+<div class="callout callout-attack" data-searchable><b>⚠ Replay Attack.</b>Attacker who stole old session key K_AB can replay step 3 even after Alice changes K_AS. <strong>Fix:</strong> Add timestamps — Bob only accepts fresh timestamps.</div>
+</section>
+
+<!-- ══════════ KERBEROS ══════════ -->
+<section id="kerberos" data-section data-category="auth">
+<h2 class="sec"><span class="sec-icon" style="background:var(--accent-light)">🎟️</span>Kerberos</h2>
+
+<p data-searchable>Created by MIT (Project Athena). Based on Needham-Schroeder. "Needham-Schroeder on steroids." Uses <strong>tickets</strong> (not tokens) as assertions of authenticity and authorization. Basis of <strong>Active Directory</strong> authentication.</p>
+
+<h3>Components</h3>
+<table data-searchable>
+  <thead><tr><th>Component</th><th>Abbrev</th><th>Role</th></tr></thead>
+  <tbody>
+  <tr><td>Client</td><td>—</td><td>The user</td></tr>
+  <tr><td>Authentication Server</td><td>AS</td><td>Verifies identity, issues TGTs. Part of KDC.</td></tr>
+  <tr><td>Ticket Granting Server</td><td>TGS</td><td>Issues service tickets for specific resources. Part of KDC.</td></tr>
+  <tr><td>Key Distribution Center</td><td>KDC</td><td>Contains both AS and TGS. Central authority.</td></tr>
+  <tr><td>Ticket Granting Ticket</td><td>TGT</td><td>Proof of identity. Required to talk to TGS.</td></tr>
+  </tbody>
+</table>
+
+<h3>Authentication Flow</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span><strong>User → AS:</strong> "I need access"</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span><strong>AS → User:</strong> Session key (encrypted with user's key) + TGT (entry pass to TGS)</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span><strong>User → TGS:</strong> TGT + target service + {user identity, timestamp} encrypted with session key</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span><strong>TGS → User:</strong> Session key for target service (encrypted two ways — once for user, once for service)</span></div>
+</div>
+
+<div class="callout callout-key" data-searchable><b>🎟️ Key Point</b>Without a valid TGT, the TGS refuses to communicate. The TGT is the trust bridge between you and any service on the network.</div>
+
+<h3>Human vs. Non-Human Identity (NHI)</h3>
+<p data-searchable>Service accounts (NHIs) are not human but have credentials and often <strong>administrative privileges</strong> needed to run services. Attackers target services over users because services have more power.</p>
+
+<h3>Kerberos Attacks</h3>
+<table data-searchable>
+  <thead><tr><th>Attack</th><th>Description</th></tr></thead>
+  <tbody>
+  <tr><td><span class="tag tag-r">Golden Ticket</span></td><td>Forged TGT → root/admin access to entire domain. Compromise KRBTGT account.</td></tr>
+  <tr><td><span class="tag tag-r">NTLM Pass-the-Hash</span></td><td>NTLMv1 hashes captured and replayed directly. Microsoft phasing out NTLMv1.</td></tr>
+  <tr><td><span class="tag tag-r">KDC Compromise</span></td><td>Single point of failure. Compromise → network-wide access. DoS → network stops.</td></tr>
+  <tr><td><span class="tag tag-a">Clock Skew</span></td><td>Timestamps critical. Bad clocks → protocol failure. Fix: use NTP.</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════ ACCESS CONTROL ══════════ -->
+<section id="access" data-section data-category="access">
+<h2 class="sec"><span class="sec-icon" style="background:var(--amber-light)">🔒</span>Access Control</h2>
+
+<p data-searchable>Policy specifying how entities interact with resources. <strong>Principal</strong> = user. <strong>Subject</strong> = entity acting on behalf of principal (a program). <strong>Object</strong> = resource (file, socket, device).</p>
+
+<p data-searchable><strong>DAC</strong> (Discretionary Access Control): owner controls access, can propagate rights. <strong>MAC</strong> (Mandatory Access Control): system-wide policy, denies users full control.</p>
+
+<h3>ACLs</h3>
+<p data-searchable>Access Control Lists encode columns of the access control matrix. Each object has a list of (subject, operation) pairs. Very flexible but complicated to manage — infinite permutations.</p>
+
+<h3>Unix Permissions</h3>
+<p data-searchable>Based on <strong>owners</strong> and <strong>groups</strong>. Three sets: owner (u), group (g), other (o). Three permissions: read (r=4), write (w=2), execute (x=1). <code>chmod 755 file</code> = rwxr-xr-x. Only owners can chmod. Only root can chown to different user.</p>
+
+<div class="callout callout-warn" data-searchable><b>⚠ Unix limitations.</b>Max 3 permission levels. Not all access control matrices can be represented. If 4+ distinct privilege levels needed for one file → impossible.</div>
+
+<h3>setuid & Confused Deputy</h3>
+<p data-searchable><code>setuid</code> (chmod u+s): program runs as <strong>file owner</strong> not executing user. Example: <code>passwd</code> runs as root to write /etc/shadow. Creates <strong>ambient authority</strong>.</p>
+<p data-searchable><strong>Confused Deputy Problem:</strong> A setuid program serves two principals and can't distinguish which one it's acting for. Malicious user tricks it into using root's permissions on unauthorized resources. <strong>Never set scripts as setuid</strong> — TOCTOU vulnerabilities.</p>
+
+<h3>Capabilities vs. ACLs</h3>
+<div class="vs-box" data-searchable>
+  <div class="vs-side"><h4 style="color:var(--blue)">ACLs (Columns)</h4><p>Object lists who can access it. Ambient authority. Simple for users. Vulnerable to confused deputies.</p></div>
+  <div class="vs-side"><h4 style="color:var(--purple)">Capabilities (Rows)</h4><p>Subject holds unforgeable tokens of authority. Must explicitly pass capabilities. No ambient authority. Solves confused deputy.</p></div>
+</div>
+<p data-searchable>Real-world capabilities: Android/iOS app permissions, POSIX capabilities (CAP_CHOWN, CAP_KILL, CAP_SYS_TIME), SELinux.</p>
+</section>
+
+<!-- ══════════ MAC ══════════ -->
+<section id="mac" data-section data-category="access">
+<h2 class="sec"><span class="sec-icon" style="background:var(--red-light)">🏛️</span>MAC: Bell-LaPadula & Biba</h2>
+
+<p data-searchable>DAC fails because it assumes benign software, bug-free code, and well-behaved users. MAC restricts access based on system-wide policy for <strong>Multi-Level Security (MLS)</strong>. Levels: Top Secret > Secret > Confidential > Unclassified.</p>
+
+<h3>Bell-LaPadula (1973) — Confidentiality</h3>
+<div class="card" data-searchable>
+  <p><strong>Simple Security:</strong> <span class="tag tag-b">No Read Up</span> — can read only if level(subject) ≥ level(object)</p>
+  <p><strong>★-Property:</strong> <span class="tag tag-b">No Write Down</span> — can write only if level(subject) ≤ level(object)</p>
+  <p><strong>Discretionary Security:</strong> Access must also be allowed by the access control matrix.</p>
+  <p><strong>Tranquility:</strong> Security levels never decrease during state transitions.</p>
+  <p style="margin:0"><strong>Caveats:</strong> Only prevents <em>overt</em> leakage. Does NOT address covert channels. Only confidentiality — no integrity.</p>
+</div>
+
+<h3>Biba (1975) — Integrity</h3>
+<div class="card" data-searchable>
+  <p><strong>Strict Integrity:</strong> <span class="tag tag-p">No Read Down</span> — can read only if integrity(subject) ≤ integrity(object)</p>
+  <p><strong>Strict Integrity:</strong> <span class="tag tag-p">No Write Up</span> — can write only if integrity(subject) ≥ integrity(object)</p>
+  <p style="margin:0">Other policies: subject low-water mark (tainting on read), object low-water mark (tainting on write), Ring (read anything, no write up).</p>
+</div>
+
+<div class="vs-box" data-searchable>
+  <div class="vs-side"><h4 style="color:var(--blue)">Bell-LaPadula</h4><p><strong>Confidentiality.</strong> "Read down, write up." Controls reads. Even malicious programs can't leak what they can't read.</p></div>
+  <div class="vs-side"><h4 style="color:var(--purple)">Biba</h4><p><strong>Integrity.</strong> "Read up, write down." Controls writes. Subjects must be trusted — malicious programs CAN write bad data.</p></div>
+</div>
+
+<p data-searchable>Windows uses <strong>Mandatory Integrity Control</strong> since Vista: Low, Medium, High, System levels. Ring policy. IE protected mode runs as Low.</p>
+</section>
+
+<!-- ══════════ COVERT & SIDE CHANNELS ══════════ -->
+<section id="covert" data-section data-category="access">
+<h2 class="sec"><span class="sec-icon" style="background:var(--purple-light)">👁️</span>Covert & Side Channels</h2>
+
+<h3>Covert Channels</h3>
+<p data-searchable>Communication via <strong>unintentional channels</strong> that bypass access control. Examples: file existence/locks, event timing, CPU cache (Meltdown & Spectre). Not blocked by Bell-LaPadula's ★-property. Very hard to eliminate — may be in code, OS, or hardware.</p>
+<p data-searchable><strong>Example:</strong> Unclassified process tries to create "russia_intel.docx". Error (exists) → classified file name leaked. Extend to binary encoding: create/don't create files to transmit 0s and 1s.</p>
+
+<div class="callout callout-def" data-searchable><b>🛡 Mitigations (imperfect):</b> Rate limits on operations (may hurt performance). Add randomness/chaff (slows but doesn't stop). Anomaly detection (false positives, not guaranteed). Use Forward Error Correction for robustness.</div>
+
+<h3>Side Channels</h3>
+<p data-searchable>Inadvertent info leakage through physical phenomena. <strong>Timing:</strong> password recovery via keystroke timing in SSH. <strong>Power:</strong> crypto key recovery from CPU voltage. <strong>RF emissions:</strong> video signal recovery from cable EM leakage. <strong>CPU cache:</strong> Meltdown & Spectre.</p>
+</section>
+
+<!-- ══════════ SOCIAL ENGINEERING ══════════ -->
+<section id="social-eng" data-section data-category="human">
+<h2 class="sec"><span class="sec-icon" style="background:var(--accent-light)">🎭</span>Social Engineering</h2>
+
+<p data-searchable>Psychological manipulation into performing actions or divulging information. Exploits human trust, not technical flaws. Techniques are ancient (con-men, magicians, PSYOPs) but amplified by the internet.</p>
+
+<h3>Cognitive Biases</h3>
+<div class="card-row" data-searchable>
+  <div class="card"><h4 style="color:var(--blue)">Authority Bias</h4><p>Believe/obey authority figures regardless of content</p></div>
+  <div class="card"><h4 style="color:var(--purple)">Confirmation Bias</h4><p>Seek info confirming existing beliefs</p></div>
+  <div class="card"><h4 style="color:var(--green)">Courtesy Bias</h4><p>Urge to avoid offending people</p></div>
+  <div class="card"><h4 style="color:var(--accent)">Halo Effect</h4><p>Positive traits spill across domains</p></div>
+  <div class="card"><h4 style="color:var(--amber)">Ingroup Bias</h4><p>Preferential treatment for own group</p></div>
+  <div class="card"><h4 style="color:var(--red)">Framing Effect</h4><p>Different conclusions from same info based on presentation</p></div>
+</div>
+
+<h3>4-Step Attack Process</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span><strong>Information Asymmetry:</strong> Know more about the target than they know about you. More info = more convincing.</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span><strong>Context Construction (Pretexting):</strong> Design believable character + backstory. Opens bias attacks. Creates urgency → cognitive overload.</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span><strong>Elicitation:</strong> Draw people out, build trust. Be polite, praise expertise, show concern.</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span><strong>Persuasion + Follow-through:</strong> Get victim to act. Ego appeals, false statements, quid pro quo. End conversation naturally — don't ghost.</span></div>
+</div>
+
+<h3>Emotional Hijacking</h3>
+<p data-searchable>Humans operate either logically or emotionally, not both. Emotional response is faster (instinct). A sudden emotional trigger (surprise, fear, joy) overrides logical thinking. Attackers exploit this — gift card scams create joy, urgency creates panic.</p>
+
+<h3>Attack Types</h3>
+<p data-searchable><strong>Baiting:</strong> Malware-loaded USB drops. <strong>Tailgating:</strong> Follow employees through secured doors (courtesy + ingroup bias). <strong>Scareware:</strong> Fake antivirus. <strong>419/Advance-fee:</strong> Promise reward for upfront payment. <strong>Sextortion:</strong> Uses breached password as "proof."</p>
+
+<details data-searchable>
+  <summary>Why 419 Scammers Say They're From Nigeria (Herley 2012)</summary>
+  <div>
+    <p>Victim density is extremely low (&lt;&lt;1%). Biggest cost = false positives (corresponding with non-victims). An absurd pretext (Nigerian Prince) is <strong>intentional</strong> — it filters out everyone except the most gullible. Victims self-identify by responding, dramatically reducing false positive rate. Expected return: E = (d·G − (1−d)·C)·N. Profitable only if true positives vastly outnumber false positives.</p>
+    <p><strong>Contrast with sextortion:</strong> Monetization is fully automated (Bitcoin). C=0, so attack everyone with the strongest possible pretext. No need to filter.</p>
+  </div>
+</details>
+</section>
+
+<!-- ══════════ PHISHING ══════════ -->
+<section id="phishing" data-section data-category="human">
+<h2 class="sec"><span class="sec-icon" style="background:var(--red-light)">🎣</span>Phishing</h2>
+
+<p data-searchable>Social-engineering attack impersonating a trusted source via email, text, call, websites, social media. Most common cause of data breaches. 611,000+ active phishing sites. Average cost: $4.88M per breach.</p>
+
+<h3>Types</h3>
+<table data-searchable>
+  <thead><tr><th>Type</th><th>Description</th></tr></thead>
+  <tbody>
+  <tr><td><span class="tag tag-r">Spear Phishing</span></td><td>Targeted at specific individuals/companies. Highly personalized.</td></tr>
+  <tr><td><span class="tag tag-r">Whaling</span></td><td>Targets senior executives or privileged users.</td></tr>
+  <tr><td><span class="tag tag-r">BEC / CEO Fraud</span></td><td>Impersonate CEO to wire money. Exploits authority + urgency bias.</td></tr>
+  <tr><td><span class="tag tag-a">Clone Phishing</span></td><td>Clone legitimate email, swap links/attachments with malicious ones.</td></tr>
+  <tr><td><span class="tag tag-a">Vishing / Smishing</span></td><td>Phone call (voice) or SMS (text) phishing.</td></tr>
+  <tr><td><span class="tag tag-a">Quishing</span></td><td>Malicious QR codes redirect to fake sites.</td></tr>
+  <tr><td><span class="tag tag-p">Social Media</span></td><td>Via platform DMs and messaging.</td></tr>
+  </tbody>
+</table>
+
+<h3>Techniques</h3>
+<p data-searchable>Impersonation, fake websites, spoofing (slight misspellings like "vv" for "w"), urgency/fear, AI-generated personalized messages + deepfakes, hybrid multi-channel attacks.</p>
+
+<h3>How to Spot & Defend</h3>
+<p data-searchable><strong>Spot:</strong> Verify sender address, hover over links, check for grammar/spelling errors, question urgency, verify requests through trusted channels, be suspicious of unsolicited attachments. <strong>Defend:</strong> Think before clicking, spam filters, regular updates, MFA, least privilege, report suspicious messages.</p>
+
+<h3>Research Findings</h3>
+<details data-searchable>
+  <summary>Key Studies on Phishing Susceptibility</summary>
+  <div>
+    <p><strong>Downs et al. (2006):</strong> 20 participants. People use poor strategies like "Do I have an account with this business?" 74% suspicious of Citibank phish, only 47% of Amazon phish. 55% noticed strange URLs. Security warnings largely ignored.</p>
+    <p><strong>Dhamija et al. (2006):</strong> 22 participants judging 20 websites. Correct identification: 6-18 of 19. Best strategy: domain + HTTPS + padlock + certificate. No correlation with age, sex, education, or browser choice.</p>
+    <p><strong>Jagatic et al. (2005) "Social Phishing":</strong> 581 Indiana U. students. Generic email: <strong>16%</strong> success. Spoofed from a friend: <strong>72%</strong> success. Opposite-sex "friend" even more effective. Some victims logged in multiple times.</p>
+    <p><strong>Sheng et al. (2010):</strong> 1000 participants. Before training: ~47% fell for phishing. After training: ~28% (40% improvement). But legitimate link clicks also dropped slightly.</p>
+  </div>
+</details>
+</section>
+
+<!-- ══════════ OSINT ══════════ -->
+<section id="osint" data-section data-category="human">
+<h2 class="sec"><span class="sec-icon" style="background:var(--green-light)">🔍</span>OSINT</h2>
+<p data-searchable><strong>Open-Source Intelligence:</strong> Collecting publicly available information to produce useful insights. "Once it's on the internet, it's there forever." Used by attackers to craft targeted phishing and social engineering.</p>
+
+<h3>Techniques</h3>
+<p data-searchable><strong>Google Dorking:</strong> <code>filetype:pdf</code>, <code>site:example.com</code>, <code>intitle:</code>, <code>intext:</code>, <code>inurl:</code>, <code>-term</code> to exclude, quotes for exact match. <strong>Reverse Image Search:</strong> TinEye, Google Images. <strong>Wayback Machine:</strong> archive.org for past website snapshots. <strong>OSINT Framework:</strong> osintframework.com directory. <strong>Social media, public records, Spokeo, background checks.</strong></p>
+
+<p data-searchable><strong>Ethics:</strong> Stick to public info. Get permission for private individuals. Don't exploit. Verify everything.</p>
+</section>
+
+<!-- ══════════ THREAT MODELING ══════════ -->
+<section id="threat" data-section data-category="framework">
+<h2 class="sec"><span class="sec-icon" style="background:var(--amber-light)">🎯</span>Threat Modeling</h2>
+
+<p data-searchable><strong>Vulnerability</strong> = identified weakness. <strong>Threat</strong> = tactic exploiting a vulnerability. <strong>Risk</strong> = likelihood of loss/damage.</p>
+
+<h3>Process</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span>Identify things of value (data, credentials, physical access, sensors)</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span>Enumerate attack surfaces (physical, social, network, supply chain)</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span>Hypothesize attackers — map capabilities to targets and surfaces</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span>Survey mitigations</span></div>
+  <div class="flow-step"><span class="flow-num">5</span><span>Balance costs vs. risks (subjective, context-dependent)</span></div>
+</div>
+
+<h3>STRIDE</h3>
+<table data-searchable>
+  <thead><tr><th>Letter</th><th>Threat</th><th>Example Question</th></tr></thead>
+  <tbody>
+  <tr><td><strong>S</strong></td><td>Spoofing</td><td>Can I pretend to be someone else?</td></tr>
+  <tr><td><strong>T</strong></td><td>Tampering</td><td>Can I maliciously change data?</td></tr>
+  <tr><td><strong>R</strong></td><td>Repudiation</td><td>Can I deny I did something?</td></tr>
+  <tr><td><strong>I</strong></td><td>Info Disclosure</td><td>Can I obtain and leak private data?</td></tr>
+  <tr><td><strong>D</strong></td><td>Denial of Service</td><td>Can I disrupt availability?</td></tr>
+  <tr><td><strong>E</strong></td><td>Elevation of Privilege</td><td>Can I gain admin access?</td></tr>
+  </tbody>
+</table>
+
+<h3>DREAD (Risk Scoring)</h3>
+<p data-searchable><strong>D</strong>amage potential · <strong>R</strong>eproducibility · <strong>E</strong>xploitability · <strong>A</strong>ffected users · <strong>D</strong>iscoverability. Each factor scored to prioritize which threats to address first.</p>
+</section>
+
+<!-- ══════════ VSD ══════════ -->
+<section id="vsd" data-section data-category="framework">
+<h2 class="sec"><span class="sec-icon" style="background:var(--purple-light)">⚖️</span>Ethics & Value Sensitive Design</h2>
+
+<p data-searchable>VSD makes socially-informed, value-based choices in technology design. It is an <strong>outlook and process</strong>, NOT an algorithm, moral framework, or recipe.</p>
+
+<h3>VSD Process</h3>
+<div class="flow-steps" data-searchable>
+  <div class="flow-step"><span class="flow-num">1</span><span>Identify <strong>stakeholders</strong> (including typically overlooked ones)</span></div>
+  <div class="flow-step"><span class="flow-num">2</span><span>Identify <strong>values/interests</strong> at stake for each stakeholder</span></div>
+  <div class="flow-step"><span class="flow-num">3</span><span>Find <strong>tradeoffs</strong> between competing values</span></div>
+  <div class="flow-step"><span class="flow-num">4</span><span><strong>Prioritize</strong> important values</span></div>
+  <div class="flow-step"><span class="flow-num">5</span><span><strong>Repeat</strong> as new information emerges</span></div>
+</div>
+
+<h3>Three Investigations</h3>
+<p data-searchable><strong>Values:</strong> Applied ethics, law, policy, case studies. <strong>Empirical:</strong> Surveys, interviews, observation, A/B testing. <strong>Technical:</strong> Prototyping, auditing, red team exercises, privacy impact assessments.</p>
+
+<p data-searchable><strong>Technical vs. Technological Success:</strong> Does it function? (technical) vs. Is it beneficial and fair? (technological).</p>
+
+<p data-searchable><strong>Responsible Disclosure:</strong> Verify the vulnerability, notify the affected party, give time to fix, then disclose. PunkSpider case study. <strong>Disinformation as cybersecurity:</strong> Campaigns target cognitive systems like cyberattacks target digital ones. "Big tent" view (Mary Ellen Zurko, MIT). Information deficit model is discredited — people don't believe false things simply because they lack facts.</p>
+</section>
+
+<!-- ══════════ LINUX & GPG ══════════ -->
+<section id="linux" data-section data-category="framework">
+<h2 class="sec"><span class="sec-icon" style="background:var(--green-light)">🐧</span>Linux & GPG</h2>
+
+<h3>Essential Commands</h3>
+<table data-searchable>
+  <thead><tr><th>Command</th><th>Function</th></tr></thead>
+  <tbody>
+  <tr><td><code>pwd</code></td><td>Print working directory</td></tr>
+  <tr><td><code>ls -la</code></td><td>List all files with permissions (incl. hidden)</td></tr>
+  <tr><td><code>cd ~ / cd ..</code></td><td>Go home / up one directory. <code>.</code> = current</td></tr>
+  <tr><td><code>mkdir / touch / cp -r / mv / rm -r</code></td><td>Create dir/file, recursive copy, move/rename, recursive delete</td></tr>
+  <tr><td><code>chmod ugo+rwx / chmod 777</code></td><td>Change permissions (symbolic / octal)</td></tr>
+  <tr><td><code>chown user:group file</code></td><td>Change ownership (only root can change owners)</td></tr>
+  <tr><td><code>ssh user@host</code></td><td>Secure remote login</td></tr>
+  <tr><td><code>scp file user@host:path</code></td><td>Secure copy to remote machine</td></tr>
+  <tr><td><code>cat / grep / sort / uniq / head / tail</code></td><td>Text processing pipeline tools</td></tr>
+  <tr><td><code>|</code> (pipe)</td><td>Chain output → input: <code>ps aux | grep bash</code></td></tr>
+  <tr><td><code>&gt; / &gt;&gt; / 2&gt;</code></td><td>Redirect output / append / stderr</td></tr>
+  <tr><td><code>man command</code></td><td>Manual/help pages</td></tr>
+  <tr><td><code>nano / vim</code></td><td>Text editors (Ctrl+O save, Ctrl+X quit in nano)</td></tr>
+  <tr><td><code>md5sum file.txt</code></td><td>Compute MD5 hash of file</td></tr>
+  </tbody>
+</table>
+
+<h3>Linux Auth Files</h3>
+<p data-searchable><code>/etc/passwd</code>: World-readable. Contains username, UID, GID, home dir, shell. <code>/etc/shadow</code>: Root-only. Contains password hashes. Format: <code>$algo$salt$hash</code> — algo 1=MD5, 5=SHA256, 6=SHA512. PAM (Pluggable Authentication Modules) handles policy.</p>
+
+<h3>GPG (GNU Privacy Guard)</h3>
+<p data-searchable>Implements OpenPGP standard. Asymmetric encryption: public key encrypts, private key decrypts. Signing works in reverse: sign with private, verify with public. Web of Trust: trust is transitive via key signing (not CAs like HTTPS). Use RSA 4096-bit keys.</p>
+<table data-searchable>
+  <thead><tr><th>Command</th><th>Function</th></tr></thead>
+  <tbody>
+  <tr><td><code>gpg --full-generate-key</code></td><td>Generate keypair (RSA 4096)</td></tr>
+  <tr><td><code>gpg --list-keys / --list-secret-keys</code></td><td>View keyring</td></tr>
+  <tr><td><code>gpg --armor --export uid &gt; pub.asc</code></td><td>Export public key (ASCII)</td></tr>
+  <tr><td><code>gpg --armor --export-secret-keys uid</code></td><td>Export private key (handle with care!)</td></tr>
+  <tr><td><code>gpg --import file</code></td><td>Import someone's public key</td></tr>
+  <tr><td><code>gpg --armor --recipient uid --encrypt file</code></td><td>Encrypt for recipient</td></tr>
+  <tr><td><code>gpg --armor --sign file</code></td><td>Digitally sign a file</td></tr>
+  <tr><td><code>gpg --sign-key uid</code></td><td>Sign someone's key (web of trust)</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- ══════════ GLOSSARY ══════════ -->
+<section id="glossary" data-section data-category="all">
+<h2 class="sec"><span class="sec-icon" style="background:var(--paper-warm)">📖</span>Glossary Index</h2>
+<p>Quick-reference for every key term. Searchable.</p>
+
+<div class="glossary-grid" data-searchable>
+  <div class="glossary-item"><span class="glossary-term">ACL</span><span class="glossary-def">Access Control List — per-object list of (subject, permission) pairs</span></div>
+  <div class="glossary-item"><span class="glossary-term">AS</span><span class="glossary-def">Authentication Server — verifies identity, issues TGTs (part of KDC)</span></div>
+  <div class="glossary-item"><span class="glossary-term">bcrypt</span><span class="glossary-def">Slow hash with configurable work factor for password storage</span></div>
+  <div class="glossary-item"><span class="glossary-term">BEC</span><span class="glossary-def">Business Email Compromise — spear phishing targeting money/info</span></div>
+  <div class="glossary-item"><span class="glossary-term">Bell-LaPadula</span><span class="glossary-def">MAC model for confidentiality: no read up, no write down</span></div>
+  <div class="glossary-item"><span class="glossary-term">Biba</span><span class="glossary-def">MAC model for integrity: no read down, no write up</span></div>
+  <div class="glossary-item"><span class="glossary-term">Capability</span><span class="glossary-def">Unforgeable token granting specific access to an object</span></div>
+  <div class="glossary-item"><span class="glossary-term">Confused Deputy</span><span class="glossary-def">Program serving two principals, can't distinguish which one</span></div>
+  <div class="glossary-item"><span class="glossary-term">Covert Channel</span><span class="glossary-def">Unintentional communication bypassing access controls</span></div>
+  <div class="glossary-item"><span class="glossary-term">DAC</span><span class="glossary-def">Discretionary Access Control — owner-controlled permissions</span></div>
+  <div class="glossary-item"><span class="glossary-term">DREAD</span><span class="glossary-def">Damage, Reproducibility, Exploitability, Affected users, Discoverability</span></div>
+  <div class="glossary-item"><span class="glossary-term">Golden Ticket</span><span class="glossary-def">Forged TGT granting domain-wide admin access</span></div>
+  <div class="glossary-item"><span class="glossary-term">Honeywords</span><span class="glossary-def">Fake passwords stored alongside real one to detect breaches</span></div>
+  <div class="glossary-item"><span class="glossary-term">KBA</span><span class="glossary-def">Knowledge-Based Authentication — security questions (weak)</span></div>
+  <div class="glossary-item"><span class="glossary-term">KDC</span><span class="glossary-def">Key Distribution Center — contains AS + TGS in Kerberos</span></div>
+  <div class="glossary-item"><span class="glossary-term">Key Stretching</span><span class="glossary-def">Making hash computation intentionally slow (bcrypt, scrypt)</span></div>
+  <div class="glossary-item"><span class="glossary-term">MAC</span><span class="glossary-def">Mandatory Access Control — system-wide policy overrides user</span></div>
+  <div class="glossary-item"><span class="glossary-term">MLS</span><span class="glossary-def">Multi-Level Security — handling data at different classifications</span></div>
+  <div class="glossary-item"><span class="glossary-term">NHI</span><span class="glossary-def">Non-Human Identity — service accounts with own credentials</span></div>
+  <div class="glossary-item"><span class="glossary-term">NIS</span><span class="glossary-def">Network Information Service (Yellow Pages) — insecure legacy auth</span></div>
+  <div class="glossary-item"><span class="glossary-term">NTLM</span><span class="glossary-def">NT LAN Manager hash — v1 vulnerable to pass-the-hash</span></div>
+  <div class="glossary-item"><span class="glossary-term">OSINT</span><span class="glossary-def">Open-Source Intelligence — publicly available information gathering</span></div>
+  <div class="glossary-item"><span class="glossary-term">PAM</span><span class="glossary-def">Pluggable Authentication Modules — Linux auth framework</span></div>
+  <div class="glossary-item"><span class="glossary-term">Rainbow Table</span><span class="glossary-def">Pre-computed hash lookup using family of reduction functions</span></div>
+  <div class="glossary-item"><span class="glossary-term">Salt</span><span class="glossary-def">Random value added to password before hashing (unique per user)</span></div>
+  <div class="glossary-item"><span class="glossary-term">scrypt</span><span class="glossary-def">Slow hash requiring large memory — resists GPU attacks</span></div>
+  <div class="glossary-item"><span class="glossary-term">setuid</span><span class="glossary-def">Permission bit — program runs as file owner, not executing user</span></div>
+  <div class="glossary-item"><span class="glossary-term">Side Channel</span><span class="glossary-def">Info leakage via physical phenomena (timing, power, RF, cache)</span></div>
+  <div class="glossary-item"><span class="glossary-term">STRIDE</span><span class="glossary-def">Spoof, Tamper, Repudiation, Info Disclosure, DoS, Elevation</span></div>
+  <div class="glossary-item"><span class="glossary-term">TGS</span><span class="glossary-def">Ticket Granting Server — issues service tickets (part of KDC)</span></div>
+  <div class="glossary-item"><span class="glossary-term">TGT</span><span class="glossary-def">Ticket Granting Ticket — proof of identity for Kerberos</span></div>
+  <div class="glossary-item"><span class="glossary-term">TOTP</span><span class="glossary-def">Time-based One-Time Password — HMAC-based rotating codes</span></div>
+  <div class="glossary-item"><span class="glossary-term">U2F</span><span class="glossary-def">Universal 2nd Factor — hardware security key standard</span></div>
+  <div class="glossary-item"><span class="glossary-term">VSD</span><span class="glossary-def">Value Sensitive Design — values-based outlook for technology design</span></div>
+  <div class="glossary-item"><span class="glossary-term">★-Property</span><span class="glossary-def">Bell-LaPadula: no write down (prevents leaking to lower levels)</span></div>
+</div>
+</section>
+
+<!-- ══════════ PRACTICE ══════════ -->
+<section id="practice" data-section data-category="all">
+<h2 class="sec"><span class="sec-icon" style="background:var(--accent-light)">🧠</span>Practice Questions</h2>
+<p>Click to reveal answers.</p>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why are salted passwords more secure than unsalted hashes?</div><div class="quiz-a">Each user has a unique random salt → identical passwords produce different hashes. Pre-computed tables useless. Attacker must brute-force each password individually.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What are the two parts of the Kerberos KDC?</div><div class="quiz-a">Authentication Server (AS) — verifies identity, issues TGTs. Ticket Granting Server (TGS) — issues service tickets for specific resources.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why are biometrics fundamentally problematic as authentication?</div><div class="quiz-a">Immutable — you can't change your fingerprint. Once compromised, no reset possible. Passwords and tokens can be revoked/replaced.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Explain the Confused Deputy Problem and its solution.</div><div class="quiz-a">A setuid program serves two principals and can't distinguish which one. Malicious user tricks it into using root's permissions on unauthorized resources. Solution: capability-based access control — no ambient authority, must explicitly pass capabilities.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">State Bell-LaPadula's ★-property and its purpose.</div><div class="quiz-a">"No write down" — subjects can only write to objects at their level or above. Prevents classified information from leaking to lower classification levels.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Compare Bell-LaPadula and Biba.</div><div class="quiz-a">BLP = confidentiality ("read down, write up"), controls reads. Biba = integrity ("read up, write down"), controls writes. BLP doesn't require trusted subjects; Biba does.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why is SMS 2FA deprecated?</div><div class="quiz-a">SIM hijacking — attacker social-engineers the phone company into activating a new SIM, redirecting all calls/SMS to attacker's phone.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What is STRIDE?</div><div class="quiz-a">Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege — Microsoft's threat categorization framework.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why does scrypt resist GPU attacks better than bcrypt?</div><div class="quiz-a">scrypt requires large amounts of memory per computation. GPUs have limited memory per core, making parallel brute-force impractical.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why do 419 scammers use absurd pretexts intentionally?</div><div class="quiz-a">Per Herley: victim density is very low, and false positives are costly. Absurd pretexts self-select the most gullible, minimizing false positives while preserving true positives.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What is a Golden Ticket attack?</div><div class="quiz-a">Forged TGT created by compromising the KRBTGT account. Grants unlimited admin access to any resource in the entire Active Directory domain.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why can't Bell-LaPadula prevent covert channels?</div><div class="quiz-a">★-property only prevents overt read/write leakage. Covert channels exploit observable side effects (file existence, timing, cache) outside the formal access control model.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What are Bell-LaPadula's four properties?</div><div class="quiz-a">1) Simple Security (no read up), 2) ★-property (no write down), 3) Discretionary Security (access matrix allows it), 4) Tranquility (levels never decrease).</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What does chmod 750 mean?</div><div class="quiz-a">Owner: rwx (4+2+1=7). Group: r-x (4+0+1=5). Other: nothing (0).</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What is emotional hijacking in social engineering?</div><div class="quiz-a">A sudden emotional trigger (surprise, fear, joy) overrides logical thinking. Attackers use it to make victims act before they can analyze the situation critically.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">How is the Needham-Schroeder replay attack fixed?</div><div class="quiz-a">Add timestamps. Bob only accepts requests with fresh timestamps, preventing replay of old messages with stolen session keys.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What are honeywords and how do they detect breaches?</div><div class="quiz-a">Fake passwords stored alongside the real one. A separate honeyserver knows which is real. If attacker cracks and uses a honeyword → alert proves database was stolen.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">In "Social Phishing," what were the success rates?</div><div class="quiz-a">Generic email: 16%. Spoofed from a friend: 72% — over 4x more effective.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">Why can't all policies be encoded in Unix permissions?</div><div class="quiz-a">Only 3 permission levels (owner, group, other). If 4+ distinct privilege levels needed → impossible. Also, owners can always grant themselves more permissions.</div></div>
+
+<div class="quiz" onclick="this.classList.toggle('open')"><div class="quiz-q">What are the 5 steps of VSD?</div><div class="quiz-a">1) Identify stakeholders, 2) Identify values at stake, 3) Find tradeoffs, 4) Prioritize values, 5) Repeat as circumstances change.</div></div>
+</section>
+
+</main>
+</div>
+
+<button class="to-top" id="notesToTop" onclick="document.getElementById('notesWrap').scrollTo({top:0,behavior:'smooth'})">↑</button></div>`;
+  
+  // Initialize notes functionality
+  setTimeout(initNotesSearch, 50);
+}
+
+function cleanupNotes() {
+  document.querySelector('.top').classList.remove('notes-active');
+  const searchArea = document.getElementById('notesSearchArea');
+  if (searchArea) searchArea.style.display = 'none';
+}
+
+function initNotesSearch() {
+  const wrap = document.getElementById('notesWrap');
+  if (!wrap) return;
+  
+  const searchInput = document.getElementById('notesSearchInput');
+  const searchCount = document.getElementById('notesSearchCount');
+  const allSearchable = wrap.querySelectorAll('[data-searchable]');
+  const allSections = wrap.querySelectorAll('[data-section]');
+  
+  function doSearch(query) {
+    // Clear previous highlights
+    wrap.querySelectorAll('mark').forEach(m => {
+      const parent = m.parentNode;
+      parent.replaceChild(document.createTextNode(m.textContent), m);
+      parent.normalize();
+    });
+    
+    if (!query.trim()) {
+      allSections.forEach(s => s.style.display = '');
+      allSearchable.forEach(el => el.classList.remove('no-match'));
+      searchCount.textContent = '';
+      return;
+    }
+    
+    const q = query.toLowerCase();
+    let matchCount = 0;
+    const matchedSections = new Set();
+    
+    allSearchable.forEach(el => {
+      const text = el.textContent.toLowerCase();
+      if (text.includes(q)) {
+        el.classList.remove('no-match');
+        matchCount++;
+        const section = el.closest('[data-section]');
+        if (section) matchedSections.add(section);
+        highlightText(el, query);
+      } else {
+        el.classList.add('no-match');
+      }
+    });
+    
+    allSections.forEach(s => {
+      if (matchedSections.has(s)) {
+        s.style.display = '';
+      } else {
+        const heading = s.querySelector('h2');
+        if (heading && heading.textContent.toLowerCase().includes(q)) {
+          s.style.display = '';
+        } else {
+          s.style.display = 'none';
+        }
+      }
+    });
+    
+    searchCount.textContent = matchCount ? matchCount + ' matches' : 'No results';
+  }
+  
+  function highlightText(el, query) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    const textNodes = [];
+    while (walker.nextNode()) textNodes.push(walker.currentNode);
+    
+    textNodes.forEach(node => {
+      const idx = node.textContent.toLowerCase().indexOf(query.toLowerCase());
+      if (idx >= 0) {
+        const span = document.createElement('mark');
+        const after = node.splitText(idx);
+        const matched = after.splitText(query.length);
+        span.textContent = after.textContent;
+        after.parentNode.replaceChild(span, after);
+      }
+    });
+  }
+  
+  let searchTimeout;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => doSearch(searchInput.value), 150);
+  });
+  
+  // Keyboard shortcuts
+  searchInput.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      searchInput.value = '';
+      doSearch('');
+      searchInput.blur();
+    }
+  });
+  
+  // Category filter chips
+  wrap.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      wrap.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter;
+      allSections.forEach(s => {
+        if (filter === 'all' || s.dataset.category === filter) {
+          s.style.display = '';
+        } else {
+          s.style.display = 'none';
+        }
+      });
+      searchInput.value = '';
+      doSearch('');
+    });
+  });
+  
+  // Active nav highlight on scroll
+  const navItems = wrap.querySelectorAll('.nav-item');
+  const notesWrap = document.getElementById('notesWrap');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navItems.forEach(n => n.classList.remove('active'));
+        const link = wrap.querySelector('.nav-item[href="#' + entry.target.id + '"]');
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '-60px 0px -60% 0px', root: notesWrap });
+  allSections.forEach(s => observer.observe(s));
+  
+  // Scroll to top button
+  const toTop = document.getElementById('notesToTop');
+  if (toTop && notesWrap) {
+    notesWrap.addEventListener('scroll', () => {
+      toTop.classList.toggle('visible', notesWrap.scrollTop > 400);
+    });
+  }
+  
+  // Fix sidebar nav links to scroll within the notes container
+  wrap.querySelectorAll('.nav-item').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href').substring(1);
+      const target = wrap.querySelector('#' + targetId);
+      if (target && notesWrap) {
+        const offset = target.offsetTop - 20;
+        notesWrap.scrollTo({ top: offset, behavior: 'smooth' });
+      }
+    });
+  });
+  
+  // Focus search input
+  searchInput.focus();
+}
+
+// Global expand/collapse for notes
+window.notesExpandAll = function() {
+  const wrap = document.getElementById('notesWrap');
+  if (wrap) {
+    wrap.querySelectorAll('details').forEach(d => d.open = true);
+    wrap.querySelectorAll('.quiz').forEach(q => q.classList.add('open'));
+  }
+};
+
+window.notesCollapseAll = function() {
+  const wrap = document.getElementById('notesWrap');
+  if (wrap) {
+    wrap.querySelectorAll('details').forEach(d => d.open = false);
+    wrap.querySelectorAll('.quiz').forEach(q => q.classList.remove('open'));
+  }
+};
+
+function showCredits(){
+  app.innerHTML=`<div class="cd" style="max-width:600px;margin:0 auto">
+    <div style="text-align:center;padding:20px 0 10px">
+      <div style="font:700 28px/1.2 var(--se);color:var(--tr);margin-bottom:6px">CY 2550 Study Engine</div>
+      <div style="font:400 14px/1.5 var(--sa);color:var(--k3)">Midterm Exam Preparation Tool</div>
+    </div>
+
+    <div style="margin-top:24px;padding:20px;background:var(--c0);border-radius:10px;border:1px solid var(--c2)">
+      <div style="font:700 11px/1 var(--sa);text-transform:uppercase;letter-spacing:.8px;color:var(--k4);margin-bottom:10px">Created By</div>
+      <div style="font:600 18px/1.3 var(--se);color:var(--k)">Raul Pineda</div>
+      <div style="font:400 13px/1.5 var(--sa);color:var(--k3);margin-top:4px">Student · CY 2550 · Spring 2025</div>
+    </div>
+
+    <div style="margin-top:14px;padding:20px;background:var(--c0);border-radius:10px;border:1px solid var(--c2)">
+      <div style="font:700 11px/1 var(--sa);text-transform:uppercase;letter-spacing:.8px;color:var(--k4);margin-bottom:10px">Course</div>
+      <div style="font:600 16px/1.3 var(--se);color:var(--k)">CY 2550 — Foundations of Cybersecurity</div>
+      <div style="font:400 13px/1.5 var(--sa);color:var(--k3);margin-top:4px">Khoury College of Computer Sciences<br>Northeastern University · Spring 2025</div>
+    </div>
+
+    <div style="margin-top:14px;padding:20px;background:var(--c0);border-radius:10px;border:1px solid var(--c2)">
+      <div style="font:700 11px/1 var(--sa);text-transform:uppercase;letter-spacing:.8px;color:var(--k4);margin-bottom:10px">About This Tool</div>
+      <div style="font:400 13px/1.65 var(--sa);color:var(--k2)">
+        This study engine was built to help prepare for the CY 2550 midterm exam. It generates randomized practice questions covering all course topics, grades answers using keyword matching and reasoning-connector detection, and provides a predicted exam grade based on accumulated performance data.
+      </div>
+      <div style="margin-top:14px;font:400 13px/1.65 var(--sa);color:var(--k2)">
+        <b>Features:</b> 15 question generators across 15 topic areas, per-question rubric grading with manual override, reasoning quality analysis, timed exam simulation, session-based grade prediction, and integrated searchable course notes.
+      </div>
+    </div>
+
+    <div style="margin-top:14px;padding:20px;background:var(--c0);border-radius:10px;border:1px solid var(--c2)">
+      <div style="font:700 11px/1 var(--sa);text-transform:uppercase;letter-spacing:.8px;color:var(--k4);margin-bottom:10px">Sources &amp; Acknowledgments</div>
+      <div style="font:400 13px/1.65 var(--sa);color:var(--k2)">
+        All study material is based on CY 2550 lecture slides, course notes, and assigned readings from the Spring 2025 semester at Northeastern University. Key topics include authentication, password storage and cracking, biometrics, Kerberos, access control (BLP, Biba, ACLs, Capabilities), social engineering, OSINT, threat modeling, and Linux security.
+      </div>
+      <div style="margin-top:10px;font:400 13px/1.65 var(--sa);color:var(--k2)">
+        The study guide content and interactive tool were created by Raul Pineda with the assistance of Claude (Anthropic). Course material and curriculum are the work of the CY 2550 instructor and the Khoury College of Computer Sciences at Northeastern University.
+      </div>
+    </div>
+
+    <div style="margin-top:14px;padding:16px;background:var(--nvb);border-radius:10px;border:1px solid rgba(43,77,122,.15)">
+      <div style="font:700 11px/1 var(--sa);text-transform:uppercase;letter-spacing:.8px;color:var(--nv);margin-bottom:8px">Disclaimer</div>
+      <div style="font:400 12px/1.6 var(--sa);color:var(--k3)">
+        This tool is a student-created study aid and is not an official university resource. The automated grader uses keyword matching and cannot verify the logical correctness of your reasoning. This tool should supplement, not replace, lecture attendance, office hours, and thorough review of the original course material. Use at your own discretion.
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:20px;font:400 12px/1.5 var(--sa);color:var(--k4)">
+      © 2025 Raul Pineda · Northeastern University · CY 2550
+    </div>
+  </div>`;
+}
+
+render();
+</script>
+</body>
+</html>
