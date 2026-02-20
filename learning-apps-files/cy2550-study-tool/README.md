@@ -17,4 +17,4 @@ This is a single-file static app. Deploy by pointing any static host at this dir
 
 ## Created By
 
-Raul Pineda, with the assistance of Claude (Anthropic).
+Raul Pineda
